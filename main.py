@@ -8,6 +8,7 @@ if __name__ == "__main__":
 
     #print(cypher.merge_line("u", "Universe", "uname").return_line().text())
 
-    db.universe.create_universe("RWBY")
+    #db.universe.create_universe("RWBY")
+    db.title.create_mask_title("Green Arrow", "Emerald Archer")
 
     db.close()

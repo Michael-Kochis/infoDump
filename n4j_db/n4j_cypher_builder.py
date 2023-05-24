@@ -15,9 +15,14 @@ class CypherBuilder:
             + type + " {name: $" + xname + "})\n"
         return self
 
+    def relation_basic(self, start, end, rel_name):
+        self.string += "MERGE (" + start + ")-[:" \
+            + rel_name + "]->(" + end + ")\n"
+        return self
+
     def return_line(self):
         self.string += "RETURN "
-        self.string += self.string.join(self.get_letters()) + ";"
+        self.string += ", ".join(self.get_letters()) + ";"
         return self
 
     def text(self):

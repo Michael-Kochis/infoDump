@@ -1,6 +1,7 @@
 from neo4j import GraphDatabase
 from dotenv import load_dotenv
 from os import environ
+from n4j_db.n4j_cypher_builder import CypherBuilder
 
 class N4JTitle:
     def __init__(self):
@@ -19,11 +20,10 @@ class N4JTitle:
 
     def create_mask_title(self, mask, title):
         response, summary, keys = self.driver.execute_query(
-            """MERGE (m :Mask {name: $mname})
-            MERGE (t :Title {name: $tname})
-            MERGE (m)-[:TITLE]->(t)
-            RETURN m, t;
-            """,
+            CypherBuilder().merge_line("m", "Mask", "mname")
+                .merge_line('t', 'Title', "tname")
+                .relation_basic('m', 't', "TITLE")
+                .return_line().text(),
             mname=mask,
             tname=title
         )
@@ -35,12 +35,11 @@ class N4JTitle:
 
 def create_person_title(self, person, title):
     response, summary, keys = self.driver.execute_query(
-        """MERGE (m :Person {name: $pname})
-        MERGE (t :Title {name: $tname})
-        MERGE (p)-[:TITLE]->(t)
-        RETURN p, t;
-        """,
-        mname=mask,
+        CypherBuilder().merge_line("p", "Person", "pname")
+                .merge_line('t', 'Title', "tname")
+                .relation_basic('m', 't', "TITLE")
+                .return_line().text(),
+        pname=person,
         tname=title
     )
     for record in response:
