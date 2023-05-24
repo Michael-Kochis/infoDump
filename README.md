@@ -12,6 +12,15 @@ To use this on your own database, you will need to put the following into a .env
 
 URI=<Your connection URI, from the Neo4J Console page, connection tab.>
 
-N4USER=<Your user name>
+N4USER= < Your user name. >
   
-N4PASS=<password for above account
+N4PASS= < password for above account. >
+
+## Superhero database from Kaggle
+heroes.csv and super_hero_powers.csv come from
+the superheroAPI courtesy of Kaggle.com.
+
+The super.csv file is an attempt to merge the two
+using the pandas dataframe.  Given the way
+the superhero API denominates powers, I decided 
+a better way of describing them was needed.
