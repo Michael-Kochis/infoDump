@@ -1,6 +1,7 @@
 from neo4j import GraphDatabase
 from dotenv import load_dotenv
 from os import environ
+from n4j_db.n4j_cypher_builder import CypherBuilder
 
 class N4JSeriesTV:
     def __init__(self):
@@ -21,11 +22,10 @@ class N4JSeriesTV:
         self.mask_series(series, mask)
 
         response, summary, keys = self.driver.execute_query(
-            """MERGE (m :Mask {name: $mname})
-            MERGE (p :Person {name: $pname})
-            MERGE (m)-[:CIVILIAN_ID]->(p)
-            RETURN m, p;
-            """,
+            CypherBuilder().merge_line("m", "Mask", "mname")
+                .merge_line("p", "Person", "pname")
+                .relation_basic("m", "p", "CIVILIAN_ID")
+                .return_line().text(),
             mname=mask,
             pname=person
         )
@@ -36,11 +36,10 @@ class N4JSeriesTV:
 
     def create_loc_series(self, series, location):
         response, summary, keys = self.driver.execute_query(
-            """MERGE (s :Series_TV {name: $sname})
-            MERGE (l :Location {name: $lname})
-            MERGE (l)-[:WITHIN]->(s)
-            RETURN l, s;
-            """,
+            CypherBuilder().merge_line("s", "Series_TV", "sname")
+                .merge_line("l", "Location", "lname")
+                .relation_basic("l", "s", "WITHIN")
+                .return_line().text(),
             lname = location,
             sname = series
         )
@@ -52,10 +51,10 @@ class N4JSeriesTV:
     def create_series_person(self, series, person):
 
         response, summary, keys = self.driver.execute_query(
-            """MERGE (s :Series_TV {name: $sname})
-                MERGE (p :Person {name: $pname})
-                MERGE (p)-[:WITHIN]->(s)
-                RETURN p, s;""",
+            CypherBuilder().merge_line("s", "Series_TV", "sname")
+                .merge_line("p", "Person", "pname")
+                .relation_basic("p", "s", "WITHIN")
+                .return_line().text(),
             pname = person,
             sname = series
         )
@@ -66,13 +65,12 @@ class N4JSeriesTV:
 
     def create_universe_series(self, universe, series):
         response, summary, keys = self.driver.execute_query(
-            """MERGE (s :Series_TV {name: $sname})
-            MERGE (u :Universe {name: $uname})
-            MERGE (s)-[:WITHIN]->(u)
-            RETURN s, u;
-            """,
-            uname = universe,
-            sname = series
+            CypherBuilder().merge_line("s", "Series_TV", "sname")
+                .merge_line("u", "Universe", "uname")
+                .relation_basic("s", "u", "WITHIN")
+                .return_line().text(),
+            uname=universe,
+            sname=series
         )
         for record in response:
             s1 = record.data().get("s").get("name")

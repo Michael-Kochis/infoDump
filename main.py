@@ -6,8 +6,7 @@ if __name__ == "__main__":
     db = database.N4J_DB()
     #cypher = CypherBuilder()
 
-    db.person.create_mask("Deathstroke", "Slade Wilson")
-    db.title.create_mask_title("Deathstroke", "Terminator")
-    db.rel_person.create_mask_kia("Deadshot", "James Holder", "Arrow - S1E3", "rifle")
+    db.series_m.create_series_person("Star Wars Movies", "Watto")
+    db.species.create_person_species("Watto", "Toydarian")
 
     db.close()

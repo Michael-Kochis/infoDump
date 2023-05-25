@@ -19,13 +19,12 @@ class N4JSeriesMovie:
 
     def create_series_mask_person(self, series, mask, person):
         response, summary, keys = self.driver.execute_query(
-            """MERGE (m :Mask {name: $mname})
-            MERGE (p :Person {name: $pname})
-            MERGE (s :Series_Movie {name: $sname})
-            MERGE (m)-[:WITHIN]->(s)
-            MERGE (m)-[:CIVILIAN_ID]->(p)
-            RETURN m, p, s;
-            """,
+            CypherBuilder().merge_line("m", "Mask", "mname")
+            .merge_line("p", "Person", "pname")
+            .merge_line("s", "Series_Movie", "sname")
+            .relation_basic("m", "s", "WITHIN")
+            .relation_basic("m", "p", "CIVILIAN_ID")
+            .return_line().text(),
             mname=mask,
             pname=person,
             sname=series
@@ -38,11 +37,10 @@ class N4JSeriesMovie:
 
     def create_series_loc(self, series, location):
         response, summary, keys = self.driver.execute_query(
-            """MERGE (s :Series_Movie {name: $sname})
-            MERGE (l :Location {name: $lname})
-            MERGE (l)-[:WITHIN]->(s)
-            RETURN l, s;
-            """,
+            CypherBuilder().merge_line("s", "Series_Movie", "sname")
+                .merge_line("l", "Location", "lname")
+                .relation_basic("l", "s", "WITHIN")
+                .return_line().text(),
             lname = location,
             sname = series
         )
@@ -53,11 +51,10 @@ class N4JSeriesMovie:
 
     def create_series_movie(self, series, movie):
         response, summary, keys = self.driver.execute_query(
-            """MERGE (s :Series_Movie {name: $sname})
-            MERGE (m :Movie {name: $mname})
-            MERGE (m)-[:WITHIN]->(s)
-            RETURN m, s;
-            """,
+            CypherBuilder().merge_line("s", "Series_Book", "sname")
+                .merge_line("m", "Movie", "mname")
+                .relation_basic("m", "s", "WITHIN")
+                .return_line().text(),
             mname = movie,
             sname = series
         )
@@ -69,10 +66,10 @@ class N4JSeriesMovie:
     def create_series_person(self, series, person):
 
         response, summary, keys = self.driver.execute_query(
-            """MERGE (s :Series_Movie {name: $sname})
-                MERGE (p :Person {name: $pname})
-                MERGE (p)-[:WITHIN]->(s)
-                RETURN p, s;""",
+            CypherBuilder().merge_line("s", "Series_Movie", "sname")
+                .merge_line("p", "Person", "pname")
+                .relation_basic("p", "s", "WITHIN")
+                .return_line().text(),
             pname = person,
             sname = series
         )
@@ -83,11 +80,10 @@ class N4JSeriesMovie:
 
     def create_universe_series(self, universe, series):
         response, summary, keys = self.driver.execute_query(
-            """MERGE (s :Series_Movie {name: $sname})
-            MERGE (u :Universe {name: $uname})
-            MERGE (s)-[:WITHIN]->(u)
-            RETURN s, u;
-            """,
+            CypherBuilder().merge_line("s", "Series_Movie", "sname")
+                .merge_line("u", "Universe", "uname")
+                .relation_basic("s", "u", "WITHIN")
+                .return_line().text(),
             uname = universe,
             sname = series
         )

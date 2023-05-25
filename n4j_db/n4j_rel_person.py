@@ -36,11 +36,10 @@ class N4JRelPerson:
 
     def create_father_of(self, father, child):
             response, summary, keys = self.driver.execute_query(
-                """MERGE (p1 :Person {name: $fname})
-                MERGE (p2 :Person {name: $cname})
-                MERGE (p2)-[:FATHER]->(p1)
-                RETURN p1, p2;
-                """,
+                CypherBuilder().merge_line("p1", "Person", "fname")
+                .merge_line("p2", "Person", "cname")
+                .relation_basic("p2", "p1", "FATHER")
+                .return_line().text(),
                 fname=father,
                 cname=child
             )
@@ -66,11 +65,10 @@ class N4JRelPerson:
 
     def create_mother_of(self, mother, child):
         response, summary, keys = self.driver.execute_query(
-            """MERGE (p1 :Person {name: $mname})
-            MERGE (p2 :Person {name: $cname})
-            MERGE (p2)-[:MOTHER]->(p1)
-            RETURN p1, p2;
-            """,
+            CypherBuilder().merge_line("p1", "Person", "mname")
+                .merge_line("p2", "Person", "cname")
+                .relation_basic("p2", "p1", "MOTHER")
+                .return_line().text(),
             mname=mother,
             cname=child
         )
@@ -98,23 +96,26 @@ class N4JRelPerson:
 
     def create_mask_on_mask_kia(self, killer, victim, when, how):
         response, summary, keys = self.driver.execute_query(
-            """MERGE (m1 :Mask {name: $kname})
-            MERGE (m2 :Mask {name: $vname})
-            MERGE (m1)-[:KILLED {when: $when, how: $how}]->(m2)
-            """,
+                CypherBuilder().merge_line("m1", "Mask", "kname")
+                .merge_line("m2", "Mask", "vname")
+                .custom_line("MERGE (m)-[:KILLED {when: $when, how: $how}]->(m2)")
+                .return_line().text(),
             kname=killer,
             vname=victim,
             when=when,
             how=how
         )
+        for record in response:
+            m1 = record.data().get("m1").get("name")
+            m2 = record.data().get("m2").get("name")
+        print(m1, "killed", m2)
 
     def create_owns_business(self, owner, business):
         response, summary, keys = self.driver.execute_query(
-            """MERGE (p :Person {name: $pname})
-            MERGE (b :Business {name: $bname})
-            MERGE (p)-[:OWNS]->(b)
-            RETURN b, p
-            """,
+            CypherBuilder().merge_line("p", "Person", "pname")
+                .merge_line("b", "Business", "bname")
+                .relation_basic("p", "b", "OWNS")
+                .return_line().text(),
             pname=owner,
             bname=business
         )
