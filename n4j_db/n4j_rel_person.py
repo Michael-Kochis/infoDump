@@ -1,6 +1,7 @@
 from neo4j import GraphDatabase
 from dotenv import load_dotenv
 from os import environ
+from n4j_db.n4j_cypher_builder import CypherBuilder
 
 class N4JRelPerson:
     def __init__(self):
@@ -48,6 +49,21 @@ class N4JRelPerson:
                 f = record.data().get("p1").get("name")
                 c = record.data().get("p2").get("name")
             print(f, "is the father of", c)
+
+    def create_mentor(self, student, teacher):
+        response, summary, keys = self.driver.execute_query(
+            CypherBuilder().merge_line("m", "Person", "mname")
+                .merge_line("s", "Person", "sname")
+                .relation_basic("s", "m", "MENTOR")
+                .return_line().text(),
+            mname=teacher,
+            sname=student
+        )
+        for record in response:
+            m1 = record.data().get("m").get("name")
+            s1 = record.data().get("s").get("name")
+        print(m1, "is the mentor of", s1)
+
 
     def create_mother_of(self, mother, child):
         response, summary, keys = self.driver.execute_query(

@@ -8,7 +8,10 @@ if __name__ == "__main__":
 
     #print(cypher.merge_line("u", "Universe", "uname").return_line().text())
 
-    #db.universe.create_universe("RWBY")
-    db.title.create_mask_title("Green Arrow", "Emerald Archer")
+    db.rel_person.create_mentor("Nahdar Vebb", "Kit Fisto")
+    db.series_t.create_series_person("Clone Wars", "Gree")
+    db.species.create_person_species("Gree", "Republic Clone")
+    db.sci_fi_loc.create_series_star("Clone Wars", "Bestine")
+    db.sci_fi_loc.create_universe_star("Star Wars", "Bespin")
 
     db.close()
