@@ -6,12 +6,7 @@ if __name__ == "__main__":
     db = database.N4J_DB()
     #cypher = CypherBuilder()
 
-    #print(cypher.merge_line("u", "Universe", "uname").return_line().text())
-
-    db.rel_person.create_mentor("Nahdar Vebb", "Kit Fisto")
-    db.series_t.create_series_person("Clone Wars", "Gree")
-    db.species.create_person_species("Gree", "Republic Clone")
-    db.sci_fi_loc.create_series_star("Clone Wars", "Bestine")
-    db.sci_fi_loc.create_universe_star("Star Wars", "Bespin")
+    db.business.create_city_business("Star City", "Papp Motel")
+    db.rel_business.create_business_address("Papp Motel", "1700 Broadway")
 
     db.close()

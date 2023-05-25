@@ -18,7 +18,7 @@ class N4JPerson:
         self.driver.close()
 
     def create_mask(self, mask, person):
-        N4JPerson._create_person(self,person)
+        N4JPerson.create_person(self,person)
         response, summary, keys = self.driver.execute_query(
             """MERGE (m :Mask {name: $name})
             MERGE (p :Person {name: $person})
