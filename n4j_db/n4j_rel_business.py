@@ -34,11 +34,10 @@ class N4JRelBusiness:
 
     def create_office_region(self, business, region):
             response, summary, keys = self.driver.execute_query(
-                """MERGE (b :Business {name: $bname})
-                MERGE (r :Region {name: $rname})
-                MERGE (b)-[:OFFICE]->(r)
-                RETURN b,r;
-                """,
+                CypherBuilder().merge_line("b", "Business", "bname")
+                    .merge_line("r", "Region", "rname")
+                    .relation_basic("b", "r", "OFFICE")
+                    .return_line().text(),
                 bname=business,
                 rname=region
             )

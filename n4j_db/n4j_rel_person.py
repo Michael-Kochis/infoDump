@@ -20,11 +20,10 @@ class N4JRelPerson:
 
     def create_kia(self, killer, victim, when, how):
         response, summary, keys = self.driver.execute_query(
-            """MERGE (p1 :Person {name: $kname})
-            MERGE (p2 :Person {name: $vname})
-            MERGE (p1)-[:KILLED {when: $when, how: $how}]->(p2)
-            RETURN p1, p2;
-            """,
+            CypherBuilder().merge_line("p1", "Person", "kname")
+                .merge_line("p2", "Person", "vname")
+                .custom_line("MERGE (p1)-[:KILLED {when: $when, how: $how}]->(p2)")
+                .return_line().text(),
             kname = killer,
             vname = victim,
             when = when,
@@ -83,16 +82,19 @@ class N4JRelPerson:
 
     def create_mask_kia(self, killer, victim, when, how):
         response, summary, keys = self.driver.execute_query(
-            """MERGE (m :Mask {name: $kname})
-            MERGE (p2 :Person {name: $vname})
-            MERGE (m)-[:KILLED {when: $time, how: $method}]->(p2)
-            RETURN m, p2;
-            """,
+            CypherBuilder().merge_line("m", "Mask", "kname")
+                .merge_line("p2", "Person", "vname")
+                .custom_line("MERGE (m)-[:KILLED {when: $time, how: $method}]->(p2)")
+                .return_line().text(),
             kname=killer,
             vname=victim,
             time=when,
             method=how
         )
+        for record in response:
+            m1 = record.data().get("m").get("name")
+            p1 = record.data().get("p2").get("name")
+        print(m1, "killed", p1)
 
     def create_mask_on_mask_kia(self, killer, victim, when, how):
         response, summary, keys = self.driver.execute_query(
