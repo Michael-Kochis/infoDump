@@ -28,3 +28,17 @@ class N4JUniverse:
             u1 = record.data().get("u").get("name")
         print(u1, "is a universe in the database")
 
+    def create_universe_city(self, universe, city):
+        response, summary, keys = self.driver.execute_query(
+            CypherBuilder().merge_line("u", "Universe", "uname")
+                .merge_line("c", "City", "cname")
+                .relation_basic("c", "u", "WITHIN")
+                .return_line().text(),
+            cname=city,
+            uname=universe
+        )
+        for record in response:
+            c1 = record.data().get("c").get("name")
+            u1 = record.data().get("u").get("name")
+        print(c1, "is city within", u1)
+
