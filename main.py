@@ -6,7 +6,8 @@ if __name__ == "__main__":
     db = database.N4J_DB()
     #cypher = CypherBuilder()
 
-    db.series_m.create_series_person("Star Wars Movies", "Watto")
-    db.species.create_person_species("Watto", "Toydarian")
+    db.person.create_person("Count Dooku")
+    db.person.create_mask("Darth Tyranus", "Count Dooku")
+    db.title.create_person_title("Count Dooku", "Count Dooku of Serenno")
 
     db.close()
