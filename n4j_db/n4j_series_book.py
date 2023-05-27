@@ -1,6 +1,7 @@
 from neo4j import GraphDatabase
 from dotenv import load_dotenv
 from os import environ
+from n4j_db.n4j_cypher_builder import CypherBuilder
 
 class N4JSeriesBook:
     def __init__(self):
@@ -19,13 +20,12 @@ class N4JSeriesBook:
 
     def create_series_mask_person(self, series, mask, person):
         response, summary, keys = self.driver.execute_query(
-            """MERGE (m :Mask {name: $mname})
-            MERGE (p :Person {name: $pname})
-            MERGE (s :Series_Book {name: $sname})
-            MERGE (m)-[:WITHIN]->(s)
-            MERGE (m)-[:CIVILIAN_ID]->(p)
-            RETURN m, p, s;
-            """,
+            CypherBuilder().merge_line("m", "Mask", "mname")
+                .merge_line("p", "Person", "pname")
+                .merge_line("s", "Series_Book", "sname")
+                .relation_basic("m", "s", "WITHIN")
+                .relation_basic("m", "p", "CIVILIAN_ID")
+                .return_line().text(),
             mname=mask,
             pname=person,
             sname=series
@@ -33,16 +33,15 @@ class N4JSeriesBook:
         for record in response:
             m1 = record.data().get("m").get("name")
             p1 = record.data().get("p").get("name")
-            s1 = record.data().get("p").get("name")
+            s1 = record.data().get("s").get("name")
         print(p1, "wears the mask of", m1, "in book series", s1)
 
     def create_series_loc(self, series, location):
         response, summary, keys = self.driver.execute_query(
-            """MERGE (s :Series_Book {name: $sname})
-            MERGE (l :Location {name: $lname})
-            MERGE (l)-[:WITHIN]->(s)
-            RETURN l, s;
-            """,
+            CypherBuilder().merge_line("s", "Series_Book", "sname")
+                .merge_line("l", "Location", "lname")
+                .relation_basic("l", "s", "WITHIN")
+                .return_line().text(),
             lname = location,
             sname = series
         )
@@ -51,28 +50,26 @@ class N4JSeriesBook:
             l1 = record.data().get("l").get("name")
         print(l1, "is location within", s1)
 
-    def create_series_movie(self, series, movie):
+    def create_series_book(self, series, book):
         response, summary, keys = self.driver.execute_query(
-            """MERGE (s :Series_Book {name: $sname})
-            MERGE (m :Movie {name: $mname})
-            MERGE (m)-[:WITHIN]->(s)
-            RETURN m, s;
-            """,
-            mname = movie,
+            CypherBuilder().merge_line("s", "Series_Book", "sname")
+                .merge_line("b", "Book", "bname")
+                .relation_basic("b", "s", "WITHIN")
+                .return_line().text(),
+            bname = book,
             sname = series
         )
         for record in response:
-            m1 = record.data().get("m").get("name")
+            b1 = record.data().get("b").get("name")
             s1 = record.data().get("s").get("name")
-        print(m1, "is movie in series", s1)
+        print(b1, "is book in series", s1)
 
     def create_series_person(self, series, person):
-
         response, summary, keys = self.driver.execute_query(
-            """MERGE (s :Series_Book {name: $sname})
-                MERGE (p :Person {name: $pname})
-                MERGE (p)-[:WITHIN]->(s)
-                RETURN p, s;""",
+            CypherBuilder().merge_line("s", "Series_Book", "sname")
+                .merge_line("p", "Person", "pname")
+                .relation_basic("p", "s", "WITHIN")
+                .return_line().text(),
             pname = person,
             sname = series
         )
@@ -83,11 +80,10 @@ class N4JSeriesBook:
 
     def create_universe_series(self, universe, series):
         response, summary, keys = self.driver.execute_query(
-            """MERGE (s :Series_Book {name: $sname})
-            MERGE (u :Universe {name: $uname})
-            MERGE (s)-[:WITHIN]->(u)
-            RETURN s, u;
-            """,
+            CypherBuilder().merge_line("s", "Series_Book", "sname")
+                .merge_line("u", "Universe", "uname")
+                .relation_basic("s", "u", "WITHIN")
+                .return_line().text(),
             uname = universe,
             sname = series
         )
