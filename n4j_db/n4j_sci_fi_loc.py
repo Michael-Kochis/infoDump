@@ -35,7 +35,7 @@ class N4JSciFiLoc:
         response, summary, keys = self.driver.execute_query(
             "MERGE (p :Planet {name: $pname})"
             "MERGE (t :Template {name: $tname})"
-            "MERGE (p)-[:TEMPLATE]->(p)"
+            "MERGE (p)-[:TEMPLATE]->(t)"
             "RETURN p, t",
             pname=planet,
             tname=template

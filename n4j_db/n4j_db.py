@@ -4,7 +4,7 @@ from n4j_db.n4j_cypher_builder import CypherBuilder
 from . import n4j_aspect,n4j_business, n4j_commons,n4j_group, n4j_loc, \
     n4j_person, n4j_rel_business, n4j_rel_person, n4j_sci_fi_loc, \
     n4j_series_book, n4j_series_comic, n4j_series_movie, n4j_series_tv, \
-    n4j_species, n4j_title,\
+    n4j_species, n4j_template, n4j_title,\
     n4j_universe,n4j_vehicle
 
 from dotenv import load_dotenv
@@ -33,6 +33,7 @@ class N4J_DB:
         self.series_m = n4j_series_movie.N4JSeriesMovie(self.driver)
         self.series_t = n4j_series_tv.N4JSeriesTV(self.driver)
         self.species = n4j_species.N4JSpecies(self.driver)
+        self.template = n4j_template.N4JTemplate(self.driver)
         self.title = n4j_title.N4JTitle(self.driver)
         self.vehicle = n4j_vehicle.N4JVehicle(self.driver)
         self.universe = n4j_universe.N4JUniverse(self.driver)
