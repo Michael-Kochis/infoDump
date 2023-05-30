@@ -26,7 +26,7 @@ class N4JNation:
             self.cypher.clear()
                 .custom_line("MERGE (n :Region :Nation {name: $nname})", "n")
                 .custom_line("MERGE (c :Region :Continent {name: $cname})", "c")
-                .relation_basic("c", "p", "WITHIN")
+                .relation_basic("n", "c", "WITHIN")
                 .return_line().text(),
             cname=continent,
             nname=nation
