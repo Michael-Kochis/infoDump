@@ -36,8 +36,8 @@ class N4JNation:
             n1 = record.data().get("n").get("name")
         print(n1, "is a nation within", c1)
 
-    def create_star_planet(self, star, planet):
-        self.common.within("Star", star, "Planet", planet)
+    def create_series_t_nation(self, series, nation):
+        self.common.within("Series_TV", series, "Nation", nation)
 
 if __name__ == "__main__":
     print("This is where unit testing would go.")
