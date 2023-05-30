@@ -2,7 +2,7 @@ from neo4j import GraphDatabase
 from n4j_db.n4j_cypher_builder import CypherBuilder
 
 from . import n4j_aspect,n4j_business, n4j_commons,n4j_group, n4j_loc, \
-    n4j_person, n4j_rel_business, n4j_rel_person, n4j_sci_fi_loc, \
+    n4j_person, n4j_rel_business, n4j_rel_person, n4j_planet, n4j_sci_fi_loc, \
     n4j_series_book, n4j_series_comic, n4j_series_movie, n4j_series_tv, \
     n4j_species, n4j_template, n4j_title,\
     n4j_universe,n4j_vehicle
@@ -24,6 +24,7 @@ class N4J_DB:
         self.common = n4j_commons.N4JCommons(self.driver)
         self.group = n4j_group.N4JGroup(self.driver)
         self.person = n4j_person.N4JPerson(self.driver)
+        self.planet = n4j_planet.N4JPlanet(self.driver)
         self.loc = n4j_loc.N4JLoc(self.driver)
         self.rel_business = n4j_rel_business.N4JRelBusiness(self.driver)
         self.rel_person = n4j_rel_person.N4JRelPerson(self.driver)

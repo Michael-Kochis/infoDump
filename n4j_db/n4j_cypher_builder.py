@@ -5,6 +5,11 @@ class CypherBuilder:
         self.string = ""
         self.letters = []
 
+    def clear(self):
+        self.string = ""
+        self.letters = []
+        return self
+
     def custom_line(self, newline, new_letters=()):
         self.string += newline + "\n"
         for neoletter in new_letters:

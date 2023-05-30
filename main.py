@@ -5,8 +5,12 @@ if __name__ == "__main__":
     db = database.N4J_DB()
     #cypher = CypherBuilder()
 
-    db.sci_fi_loc.create_star_planet("Rodia", "Rodia")
-    db.sci_fi_loc.create_planet_template("Rodia", "Swamp World")
-    db.sci_fi_loc.create_planet_template("Rodia", "Food Importer")
+    db.planet.create_planet_continent("Terra", "Africa")
+    db.planet.create_planet_continent("Terra", "Antarctica")
+    db.planet.create_planet_continent("Terra", "Asia")
+    db.planet.create_planet_continent("Terra", "Australia")
+    db.planet.create_planet_continent("Terra", "Europe")
+    db.planet.create_planet_continent("Terra", "North America")
+    db.planet.create_planet_continent("Terra", "South America")
 
     db.close()
