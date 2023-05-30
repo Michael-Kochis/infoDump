@@ -36,8 +36,20 @@ class N4JNation:
             n1 = record.data().get("n").get("name")
         print(n1, "is a nation within", c1)
 
+    def create_series_x_nation(self, series, type, nation):
+        self.common.within("Nation", nation, type, series)
+
+    def create_series_b_nation(self, series, nation):
+        self.create_series_x_nation(series, "Series_Book", nation)
+
+    def create_series_c_nation(self, series, nation):
+        self.create_series_x_nation(series, "Series_Comic", nation)
+
+    def create_series_m_nation(self, series, nation):
+        self.create_series_x_nation(series, "Series_Movie", nation)
+
     def create_series_t_nation(self, series, nation):
-        self.common.within("Series_TV", series, "Nation", nation)
+        self.create_series_x_nation(series, "Series_TV", nation)
 
 if __name__ == "__main__":
     print("This is where unit testing would go.")
