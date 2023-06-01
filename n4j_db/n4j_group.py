@@ -1,6 +1,7 @@
 from neo4j import GraphDatabase
 from dotenv import load_dotenv
 from os import environ
+from n4j_db.n4j_cypher_builder import CypherBuilder
 
 class N4JGroup:
     def __init__(self):
@@ -71,3 +72,35 @@ class N4JGroup:
             p1 = record.data().get("p").get("name")
 
         print(p1, "has role", role, "for", g1)
+
+    def create_group_position(self, group, position):
+        response, summary, keys = self.driver.execute_query(
+            CypherBuilder().merge_line("g", "Group", "gname")
+                .merge_line("p", "Position", "pname")
+                .relation_basic("p", "g", "POSITION_WITHIN")
+                .return_line().text(),
+            gname=group,
+            pname=position
+            )
+        for record in response:
+            g1 = record.data().get("g").get("name")
+            p1 = record.data().get("p").get("name")
+
+        print(p1, "is position within", g1)
+
+    def create_position_person(self, position, person, begin="", end=""):
+        response, summary, keys = self.driver.execute_query(
+            CypherBuilder().merge_line("p2", "Position", "pname2")
+                .merge_line("p1", "Person", "pname")
+                .custom_line("MERGE (p1)-[:POSITION {begins: $bname, ends: $ename}]->(p2)", "")
+                .return_line().text(),
+            bname=begin,
+            ename=end,
+            pname=person,
+            pname2=position
+            )
+        for record in response:
+            p2 = record.data().get("p2").get("name")
+            p1 = record.data().get("p1").get("name")
+
+        print("From", begin, "until", end, ", ", p1, "held the position of", p2)
