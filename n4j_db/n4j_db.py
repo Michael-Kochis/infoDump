@@ -1,8 +1,7 @@
 from neo4j import GraphDatabase
-from n4j_db.n4j_cypher_builder import CypherBuilder
 
-from . import n4j_aspect,n4j_business, n4j_commons,n4j_group, n4j_loc, \
-    n4j_nation, n4j_person, n4j_rel_business, n4j_rel_person, \
+from . import n4j_aspect,n4j_bloodline,n4j_business, n4j_commons,n4j_group, \
+    n4j_loc, n4j_nation, n4j_person, n4j_rel_business, n4j_rel_person, \
     n4j_planet, n4j_sci_fi_loc, \
     n4j_series_book, n4j_series_comic, n4j_series_movie, n4j_series_tv, \
     n4j_species, n4j_template, n4j_title,\
@@ -21,6 +20,7 @@ class N4J_DB:
         self.driver = GraphDatabase.driver(URI, auth=AUTH)
 
         self.aspect = n4j_aspect.N4JAspect(self.driver)
+        self.bloodline = n4j_bloodline.N4JBloodline(self.driver)
         self.business = n4j_business.N4JBusiness(self.driver)
         self.common = n4j_commons.N4JCommons(self.driver)
         self.group = n4j_group.N4JGroup(self.driver)
