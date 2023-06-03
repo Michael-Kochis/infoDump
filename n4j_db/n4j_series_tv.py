@@ -2,6 +2,7 @@ from neo4j import GraphDatabase
 from dotenv import load_dotenv
 from os import environ
 from n4j_db.n4j_cypher_builder import CypherBuilder
+from n4j_db.n4j_commons import N4JCommons
 
 class N4JSeriesTV:
     def __init__(self):
@@ -11,9 +12,14 @@ class N4JSeriesTV:
         AUTH = (environ.get("N4USER"), environ.get("N4PASS"))
 
         self.driver = GraphDatabase.driver(URI, auth=AUTH)
+        self.__submodule__()
 
     def __init__(self, driver):
         self.driver = driver
+        self.__submodule__()
+
+    def __submodule__(self):
+        self.common = N4JCommons(self.driver)
 
     def close(self):
         self.driver.close()
@@ -35,44 +41,10 @@ class N4JSeriesTV:
         print(p1, "wears the mask of", m1)
 
     def create_loc_series(self, series, location):
-        response, summary, keys = self.driver.execute_query(
-            CypherBuilder().merge_line("s", "Series_TV", "sname")
-                .merge_line("l", "Location", "lname")
-                .relation_basic("l", "s", "WITHIN")
-                .return_line().text(),
-            lname = location,
-            sname = series
-        )
-        for record in response:
-            s1 = record.data().get("s").get("name")
-            l1 = record.data().get("l").get("name")
-        print(l1, "is location within", s1)
+        self.common.within("Location", location, "Series_TV", series)
 
     def create_series_person(self, series, person):
-
-        response, summary, keys = self.driver.execute_query(
-            CypherBuilder().merge_line("s", "Series_TV", "sname")
-                .merge_line("p", "Person", "pname")
-                .relation_basic("p", "s", "WITHIN")
-                .return_line().text(),
-            pname = person,
-            sname = series
-        )
-        for record in response:
-            s1 = record.data().get("s").get("name")
-            p1 = record.data().get("p").get("name")
-        print(p1, "is a person within", s1)
+        self.common.within("Person", person, "Series_TV", series)
 
     def create_universe_series(self, universe, series):
-        response, summary, keys = self.driver.execute_query(
-            CypherBuilder().merge_line("s", "Series_TV", "sname")
-                .merge_line("u", "Universe", "uname")
-                .relation_basic("s", "u", "WITHIN")
-                .return_line().text(),
-            uname=universe,
-            sname=series
-        )
-        for record in response:
-            s1 = record.data().get("s").get("name")
-            u1 = record.data().get("u").get("name")
-        print(s1, "is a series within", u1)
+        self.common.within("Series_TV", series, "Universe", universe)
