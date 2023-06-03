@@ -25,7 +25,7 @@ class N4JSeriesTV:
         self.driver.close()
 
     def create_mask_series(self, series, mask, person):
-        self.mask_series(series, mask)
+        self.common.within("Mask", mask, "Series_TV", series)
 
         response, summary, keys = self.driver.execute_query(
             CypherBuilder().merge_line("m", "Mask", "mname")
@@ -45,6 +45,9 @@ class N4JSeriesTV:
 
     def create_series_city(self, series, city):
         self.common.within("City", city, "Series_TV", series)
+
+    def create_series_group(self, series, group):
+        self.common.within("Group", group, "Series_TV", series)
 
     def create_series_person(self, series, person):
         self.common.within("Person", person, "Series_TV", series)
