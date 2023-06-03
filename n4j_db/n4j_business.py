@@ -1,6 +1,7 @@
 from neo4j import GraphDatabase
 from dotenv import load_dotenv
 from os import environ
+from n4j_db.n4j_cypher_builder import CypherBuilder
 from n4j_db.n4j_commons import N4JCommons
 
 class N4JBusiness:
@@ -24,57 +25,25 @@ class N4JBusiness:
         self.driver.close()
 
     def create_city_bank(self, city, business):
-        response, summary, keys = self.driver.execute_query(
-            """MERGE (c :City {name: $cname})
-            MERGE (b :Bank :Business :Corporation {name: $bname})
-            MERGE (b)-[:WITHIN]->(c)
-            RETURN b, c;
-            """,
-            bname=business,
-            cname=city
-        )
-        for record in response:
-            b1 = record.data().get("b").get("name")
-            c1 = record.data().get("c").get("name")
-        print(b1, "is a bank in", c1)
+        self.create_city_corp_type(city, business, "Bank")
 
     def create_city_business(self, city, business):
-        response, summary, keys = self.driver.execute_query(
-            """MERGE (c :City {name: $cname})
-            MERGE (b :Business {name: $bname})
-            MERGE (b)-[:WITHIN]->(c)
-            RETURN b, c;
-            """,
-            bname = business,
-            cname = city
-        )
-        for record in response:
-            b1 = record.data().get("b").get("name")
-            c1 = record.data().get("c").get("name")
-        print(b1, "is a business in", c1)
+        self.commons.within("Business", business, "City", city)
 
     def create_city_corp(self, city, business):
-        response, summary, keys = self.driver.execute_query(
-            """MERGE (c :City {name: $cname})
-            MERGE (b :Business :Corporation {name: $bname})
-            MERGE (b)-[:WITHIN]->(c)
-            RETURN b, c;
-            """,
-            bname=business,
-            cname=city
-        )
-        for record in response:
-            b1 = record.data().get("b").get("name")
-            c1 = record.data().get("c").get("name")
-        print(b1, "is a corporation in", c1)
+        self.create_city_business(city, business)
+        self.commons.node_add_label("Business", business, "Corporation")
+
+    def create_city_corp_type(self, city, corp, type):
+        self.create_city_corp(city, corp)
+        self.commons.node_add_label("Corporation", corp, type)
 
     def create_corp_owns_business(self, corp, business):
         response, summary, keys = self.driver.execute_query(
-            """MERGE (c :Corporation {name: $cname})
-            MERGE (b :Business :Corporation {name: $bname})
-            MERGE (c)-[:OWNS]->(b)
-            RETURN b, c;
-            """,
+            CypherBuilder().merge_line("b", "Business", "bname")
+                .merge_line("c", "Corporation", "cname")
+                .relation_basic("c", "b", "OWNS")
+                .return_line().text(),
             bname=business,
             cname=corp
         )
