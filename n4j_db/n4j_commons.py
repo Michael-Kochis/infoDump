@@ -18,6 +18,17 @@ class N4JCommons:
     def close(self):
         self.driver.close()
 
+    def node_add_label(self, type, name, label):
+        response, summary, keys =self.driver.execute_query(
+            CypherBuilder().merge_line("n", type, "cname")
+                .custom_line("SET n :" + label)
+                .return_line().text(),
+            cname=name
+        )
+        for record in response:
+            n1 = record.data().get("n").get("name")
+        print(n1, "is now also", label)
+
     def within(self, atype, aname, btype, bname):
         response, summary, keys = self.driver.execute_query(
             CypherBuilder().merge_line("a", atype, "aname")

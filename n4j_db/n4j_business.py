@@ -1,6 +1,7 @@
 from neo4j import GraphDatabase
 from dotenv import load_dotenv
 from os import environ
+from n4j_db.n4j_commons import N4JCommons
 
 class N4JBusiness:
     def __init__(self):
@@ -10,9 +11,14 @@ class N4JBusiness:
         AUTH = (environ.get("N4USER"), environ.get("N4PASS"))
 
         self.driver = GraphDatabase.driver(URI, auth=AUTH)
+        self.__submodules__()
 
     def __init__(self, driver):
         self.driver = driver
+        self.__submodules__()
+
+    def __submodules__(self):
+        self.commons = N4JCommons(self.driver)
 
     def close(self):
         self.driver.close()
@@ -76,3 +82,7 @@ class N4JBusiness:
             b1 = record.data().get("b").get("name")
             c1 = record.data().get("c").get("name")
         print(c1, "owns", b1)
+
+    def create_universe_corp(self, universe, corp):
+        self.commons.within("Corporation", corp, "Universe", universe)
+        self.commons.node_add_label("Corporation", corp, "Business")

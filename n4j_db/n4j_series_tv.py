@@ -43,6 +43,9 @@ class N4JSeriesTV:
     def create_loc_series(self, series, location):
         self.common.within("Location", location, "Series_TV", series)
 
+    def create_series_city(self, series, city):
+        self.common.within("City", city, "Series_TV", series)
+
     def create_series_person(self, series, person):
         self.common.within("Person", person, "Series_TV", series)
 
