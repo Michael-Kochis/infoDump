@@ -1,4 +1,5 @@
 import PySimpleGUI as front
+import bcrypt
 
 class MainInfodumpWindow:
     def __init__(self):
@@ -13,7 +14,12 @@ class MainInfodumpWindow:
 
     def read(self):
         event, values = self.window.read()
-        print("Value entered", values['login'], ":", values['password'])
+        pcrypt = bcrypt.hashpw(bytes(values["password"], encoding='utf8'), bcrypt.gensalt(16))
+        print("Value entered", values['login'], ":", pcrypt)
+        if bcrypt.checkpw(bytes(values["password"], encoding='utf8'), pcrypt):
+            print("MATCH!")
+        else:
+            print("Something went wrong.")
 
     def close(self):
         self.window.close()
