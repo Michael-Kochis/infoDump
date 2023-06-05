@@ -20,6 +20,12 @@ class CypherBuilder:
         self.letters.sort()
         return self.letters
 
+    def match_line(self, letter, type, xname):
+        self.letters.append(letter)
+        self.string += "MATCH (" + letter + " :" \
+            + type + " {name: $" + xname + "})\n"
+        return self
+
     def merge_line(self, letter, type, xname):
         self.letters.append(letter)
         self.string += "MERGE (" + letter + " :" \

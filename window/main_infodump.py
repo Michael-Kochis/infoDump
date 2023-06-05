@@ -1,5 +1,6 @@
 import PySimpleGUI as front
 import bcrypt
+from n4j_db.n4j_db import N4J_DB
 
 class MainInfodumpWindow:
     def __init__(self):
@@ -12,6 +13,7 @@ class MainInfodumpWindow:
             [front.Button("Login"), front.Button("Register"), front.Button("Cancel")]
         )
         self.window = front.Window("Infodump Main", layout)
+        self.db = N4J_DB()
 
     def read(self):
 
@@ -22,12 +24,19 @@ class MainInfodumpWindow:
             if event in (None, "Cancel"):
                 break
             if event in ("Register"):
-                pcrypt = bcrypt.hashpw(bytes(values["password"], encoding='utf8'), bcrypt.gensalt(16))
-            if event in ("Login"):
-                if bcrypt.checkpw(bytes(values["password"], encoding='utf8'), pcrypt):
-                    self.window["loginStatus"].Update("MATCH!")
+                if self.db.login.login_exists(values["login"]):
+                    self.window["loginStatus"].Update("Login already exists.")
                 else:
-                    self.window["loginStatus"].Update("Something went wrong.")
+                    self.db.login.register_login(values["login"], values["password"], "Player")
+                    self.window["loginStatus"].Update("Login created:", values["login"])
+            if event in ("Login"):
+                if self.db.login.login_exists(values["login"]):
+                    if self.db.login.login(values["login"], values["password"]):
+                        self.window["loginStatus"].Update("MATCH!")
+                    else:
+                        self.window["loginStatus"].Update("Something went wrong.")
+                else:
+                    self.window["loginStatus"].Update("Login does not exist")
 
     def close(self):
         self.window.close()
