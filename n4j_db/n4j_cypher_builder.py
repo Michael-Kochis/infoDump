@@ -26,6 +26,12 @@ class CypherBuilder:
             + type + " {name: $" + xname + "})\n"
         return self
 
+    def match_all_line(self, letter, type):
+        self.letters.append(letter)
+        self.string += "MATCH (" + letter + " :" \
+            + type + ")\n"
+        return self
+
     def merge_line(self, letter, type, xname):
         self.letters.append(letter)
         self.string += "MERGE (" + letter + " :" \

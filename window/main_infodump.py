@@ -1,6 +1,7 @@
 import PySimpleGUI as front
-import bcrypt
+
 from n4j_db.n4j_db import N4J_DB
+from window.series_tv_window import SeriesTVWindow
 
 class MainInfodumpWindow:
     def __init__(self):
@@ -17,7 +18,6 @@ class MainInfodumpWindow:
 
     def read(self):
 
-        pcrypt = b""
         while True:
             event, values = self.window.read()
 
@@ -33,6 +33,7 @@ class MainInfodumpWindow:
                 if self.db.login.login_exists(values["login"]):
                     if self.db.login.login(values["login"], values["password"]):
                         self.window["loginStatus"].Update("MATCH!")
+                        SeriesTVWindow().read()
                     else:
                         self.window["loginStatus"].Update("Something went wrong.")
                 else:
