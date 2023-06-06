@@ -11,5 +11,4 @@ if __name__ == "__main__":
     window.read()
     window.close()
 
-
     db.close()

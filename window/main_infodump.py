@@ -21,7 +21,7 @@ class MainInfodumpWindow:
         while True:
             event, values = self.window.read()
 
-            if event in (None, "Cancel"):
+            if event in (None, "Cancel", front.WIN_CLOSED):
                 break
             if event in ("Register"):
                 if self.db.login.login_exists(values["login"]):
