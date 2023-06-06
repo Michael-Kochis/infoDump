@@ -11,7 +11,5 @@ if __name__ == "__main__":
     window.read()
     window.close()
 
-    #db.business.create_city_corp_type("Star City", "Redwood United Bank", "Bank")
-    #db.group.create_group_member("Star City Police Department", "Stan Washington", "officer")
 
     db.close()

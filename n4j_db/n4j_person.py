@@ -2,6 +2,8 @@ from neo4j import GraphDatabase
 from dotenv import load_dotenv
 from os import environ
 
+from n4j_db.n4j_cypher_builder import CypherBuilder
+
 class N4JPerson:
     def __init__(self):
         load_dotenv()
@@ -45,6 +47,20 @@ class N4JPerson:
 
     def find_mike(self):
         N4JPerson._find_person(self, "Michael Kochis")
+
+    def person_owns_business(self, person, business):
+        response, summary, keys = self.driver.execute_query(
+            CypherBuilder().merge_line("p", "Person", "pname")
+                .merge_line("b", "Business", "bname")
+                .relation_basic("p", "b", "OWNS")
+                .return_line().text(),
+            bname=business,
+            pname=person
+        )
+        for record in response:
+            b1 = record.data().get("b").get("name")
+            p1 = record.data().get("p").get("name")
+        print(p1, "owns", b1)
 
 if __name__ == "__main__":
     with GraphDatabase.driver(URI, auth=AUTH) as driver:
