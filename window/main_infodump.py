@@ -1,7 +1,7 @@
 import PySimpleGUI as front
 
 from n4j_db.n4j_db import N4J_DB
-from window.series_tv_window import SeriesTVWindow
+from window.series_window import SeriesWindow
 
 class MainInfodumpWindow:
     def __init__(self):
@@ -33,7 +33,7 @@ class MainInfodumpWindow:
                 if self.db.login.login_exists(values["login"]):
                     if self.db.login.login(values["login"], values["password"]):
                         self.window["loginStatus"].Update("MATCH!")
-                        SeriesTVWindow().read()
+                        SeriesWindow().read()
                     else:
                         self.window["loginStatus"].Update("Something went wrong.")
                 else:
