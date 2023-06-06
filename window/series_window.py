@@ -16,6 +16,15 @@ class SeriesWindow:
              front.Radio("Book", "Series", key="Book")],
             [front.Listbox(values=series_list, select_mode="single",
                            key="series_name", size=(40, 5))],
+            [front.Text("Add:")],
+            [front.Radio("Person", "Minor", key="Person"),
+             front.Radio("Mask", "Minor", key="Mask"),
+             front.Radio("Business", "Minor", key="Business")],
+             [front.Radio("Location", "Minor", key="Location"),
+             front.Radio("Group", "Minor", key="Group"),
+             front.Radio("City", "Minor", key="City"),
+             ],
+            [front.InputText(key="MinorName")],
             [front.Button("Done", disabled=False), front.Button("Event-test"),
                 front.Button("Refresh")]
         )
@@ -48,10 +57,10 @@ class SeriesWindow:
             event, values = self.window.read()
             if event in (None, "Done", front.WIN_CLOSED):
                 break
-            elif event == "Done":
-                break
             elif event == "Event-test":
                 print(event)
+                print(values["series_name"])
+                print(values["MinorName"])
             elif event == "Refresh":
                 self.refresh(values)
             else:
@@ -61,16 +70,12 @@ class SeriesWindow:
     def refresh(self, values):
         neo_list = self.window["series_name"].GetListValues()
         if values["TV"]:
-            print("Refresh TV")
             neo_list = self.getSeriesTV()
         elif values["Movie"]:
-            print("Refresh Movie")
             neo_list = self.getSeriesMovie()
         elif values["Comic"]:
-            print("Refresh Comic")
             neo_list = self.getSeriesComic()
         elif values["Book"]:
-            print("Refresh Book")
             neo_list = self.getSeriesBook()
 
         self.window["series_name"].Update(neo_list)
