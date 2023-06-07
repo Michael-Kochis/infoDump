@@ -1,5 +1,6 @@
 import PySimpleGUI as front
 
+from window.utils_radio_button import RadioButtonUtils as rb
 from n4j_db.n4j_db import N4J_DB
 from n4j_db.n4j_cypher_builder import CypherBuilder
 
@@ -7,9 +8,10 @@ class SeriesWindow:
     def __init__(self):
         front.theme("LightGreen10")
         self.db = N4J_DB()
+
         series_list = self.getSeriesTV()
         layout = (
-            [front.Text("TV Series Window")],
+            [front.Text("Series Window")],
             [front.Radio("TV", "Series", default=True, key="TV"),
              front.Radio("Movie", "Series", key="Movie"),
              front.Radio("Comic", "Series", key="Comic"),
@@ -20,15 +22,35 @@ class SeriesWindow:
             [front.Radio("Person", "Minor", key="Person"),
              front.Radio("Mask", "Minor", key="Mask"),
              front.Radio("Business", "Minor", key="Business")],
-             [front.Radio("Location", "Minor", key="Location"),
+            [front.Radio("Location", "Minor", key="Location"),
              front.Radio("Group", "Minor", key="Group"),
              front.Radio("City", "Minor", key="City"),
              ],
             [front.InputText(key="MinorName")],
             [front.Button("Done", disabled=False), front.Button("Event-test"),
-                front.Button("Refresh")]
+                front.Button("Create"), front.Button("Refresh")]
         )
         self.window = front.Window("Infodump Main", layout, modal=True)
+
+    def create_record(self, values):
+        name = values["MinorName"]
+
+        series = ""
+        if len(values["series_name"]) > 0:
+            series = values["series_name"][0]
+        minor_type = rb.getMinor(values)
+        if series in (None, ""):
+            print("No series selected.")
+        elif values["TV"]:
+            self.db.common.within(minor_type, name, "Series_TV", series)
+        elif values["Movie"]:
+            self.db.common.within(minor_type, name, "Series_TMovie", series)
+        elif values["Comic"]:
+            self.db.common.within(minor_type, name, "Series_Comic", series)
+        elif values["Book"]:
+            self.db.common.within(minor_type, name, "Series_Book", series)
+        else:
+            print("Something went wrong.")
 
     def getSeries(self, type):
         returnThis =[]
@@ -38,6 +60,8 @@ class SeriesWindow:
         )
         for record in response:
             returnThis.append(record.data().get("s").get("name"))
+            returnThis.sort()
+
         return returnThis
 
     def getSeriesBook(self):
@@ -57,10 +81,14 @@ class SeriesWindow:
             event, values = self.window.read()
             if event in (None, "Done", front.WIN_CLOSED):
                 break
+            elif event == "Create":
+                self.create_record(values)
             elif event == "Event-test":
                 print(event)
-                print(values["series_name"])
+                if len(values["series_name"]) > 0:
+                    print(values["series_name"][0])
                 print(values["MinorName"])
+                print(rb.getMinor(values))
             elif event == "Refresh":
                 self.refresh(values)
             else:
