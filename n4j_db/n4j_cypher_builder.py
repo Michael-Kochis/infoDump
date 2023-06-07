@@ -43,6 +43,24 @@ class CypherBuilder:
             + rel_name + "]->(" + end + ")\n"
         return self
 
+    def relation_complex(self, start, end, rel_name, prop_list):
+        self.string += "MERGE (" + start + ")-[r:" + rel_name
+        if len(prop_list) > 0:
+            self.string += " { "
+            iterations = 0
+            loops = len(prop_list)
+            print(loops)
+            for entry in prop_list:
+                iterations += 1
+                if not(entry[0] in (None, "")) and not(entry[1] in (None, "")):
+                    self.string += entry[0] + " : \"" + entry[1] + "\""
+                    if iterations < loops:
+                        self.string += ", "
+            self.string += "} "
+
+        self.string += "]->(" + end + ")\n"
+        return self
+
     def return_line(self):
         self.string += "RETURN "
         self.string += ", ".join(self.get_letters()) + ";"

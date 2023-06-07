@@ -2,20 +2,20 @@
 
 class RadioButtonUtils:
     @staticmethod
-    def getMinor(values):
+    def getMinor(values, section=""):
         returnThis = ''
 
-        if values["Person"]:
+        if values["Person" + section]:
             returnThis = "Person"
-        elif values["Mask"]:
+        elif values["Mask" + section]:
             returnThis = "Mask"
-        elif values["Location"]:
+        elif values["Location" + section]:
             returnThis = "Location"
-        elif values["Business"]:
+        elif values["Business" + section]:
             returnThis = "Business"
-        elif values["Group"]:
+        elif values["Group" + section]:
             returnThis = "Group"
-        elif values["City"]:
+        elif values["City" + section]:
             returnThis = "City"
 
         return returnThis
