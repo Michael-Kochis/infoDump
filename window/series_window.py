@@ -17,6 +17,7 @@ class SeriesWindow:
              front.Radio("Movie", "Series", key="Movie"),
              front.Radio("Comic", "Series", key="Comic"),
              front.Radio("Book", "Series", key="Book")],
+            [front.Radio("Universe", "Series", key="Universe")],
             [front.Listbox(values=series_list, select_mode="single",
                            key="series_name", size=(40, 5))],
             [front.Text("Add:")],
@@ -44,6 +45,8 @@ class SeriesWindow:
             self.db.common.within(minor_type, name, "Series_Comic", series)
         elif values["Book"]:
             self.db.common.within(minor_type, name, "Series_Book", series)
+        elif values["Universe"]:
+            self.db.common.within(minor_type, name, "Universe", series)
         else:
             print("Something went wrong.")
 
@@ -100,6 +103,8 @@ class SeriesWindow:
             neo_list = self.getSeriesComic()
         elif values["Book"]:
             neo_list = self.getSeriesBook()
+        elif values["Universe"]:
+            neo_list = self.getSeries("Universe")
 
         self.window["series_name"].Update(neo_list)
 

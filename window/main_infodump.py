@@ -2,6 +2,7 @@ import PySimpleGUI as front
 
 from n4j_db.n4j_db import N4J_DB
 from window.series_window import SeriesWindow
+from window.relation_window import RelationWindow
 
 class MainInfodumpWindow:
     def __init__(self):
@@ -34,6 +35,8 @@ class MainInfodumpWindow:
                     if self.db.login.login(values["login"], values["password"]):
                         self.window["loginStatus"].Update("MATCH!")
                         SeriesWindow().read()
+                        RelationWindow().read()
+
                     else:
                         self.window["loginStatus"].Update("Something went wrong.")
                 else:

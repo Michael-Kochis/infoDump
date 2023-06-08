@@ -114,7 +114,6 @@ class RelationWindow:
                     print(values["var1_name"], ":", values["var1_value"])
                 if values["var2_name"] != "":
                     print(values["var2_name"], ":", values["var2_value"])
-                print (rb.getMinor(values, "2"))
                 if len(values["secondary_name"]) > 0:
                     print(values["secondary_name"][0])
 
