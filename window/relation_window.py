@@ -1,4 +1,4 @@
-import PySimpleGUI as front
+import PySimpleGUI as pg
 
 from window.utils_radio_button import RadioButtonUtils as rb
 from n4j_db.n4j_db import N4J_DB
@@ -6,44 +6,34 @@ from n4j_db.n4j_cypher_builder import CypherBuilder
 
 class RelationWindow:
     def __init__(self):
-        front.theme("LightGreen10")
+        pg.theme("LightGreen10")
         self.db = N4J_DB()
 
         minor_list = self.getPerson()
         relation_list = self.getAllRelations()
-        layout = (
-            [front.Column([[front.Text("Relations Window Primary")],
-            [front.Radio("Person", "Minor", key="Person"),
-             front.Radio("Mask", "Minor", key="Mask"),
-             front.Radio("Business", "Minor", key="Business")],
-            [front.Radio("Location", "Minor", key="Location"),
-             front.Radio("Group", "Minor", key="Group"),
-             front.Radio("City", "Minor", key="City"),
-             ],
-            [front.Listbox(values=minor_list, select_mode="single",
+        minor_1, minor_2, minor_3 = rb.set_minor_buttons("")
+        second_1, second_2, second_3 = rb.set_minor_buttons("2")
+
+        layout = ([pg.Column([[pg.Text("Relations Window Primary")],
+            minor_1, minor_2, minor_3,
+            [pg.Listbox(values=minor_list, select_mode="single",
                            key="primary_name", size=(40, 5))]]),
-             front.Column([[front.Text("Relationship")],
-                [front.Listbox(values=relation_list, select_mode="single",
+             pg.Column([[pg.Text("Relationship")],
+                [pg.Listbox(values=relation_list, select_mode="single",
                     key="relation_selected", size=(40,5))],
-                           [front.InputText(key="var1_name", size=(10, 1)),
-                            front.InputText(key="var1_value", size=(28, 1))],
-                           [front.InputText(key="var2_name", size=(10,1)),
-                            front.InputText(key="var2_value", size=(28,1))],
+                           [pg.InputText(key="var1_name", size=(10, 1)),
+                            pg.InputText(key="var1_value", size=(28, 1))],
+                           [pg.InputText(key="var2_name", size=(10,1)),
+                            pg.InputText(key="var2_value", size=(28,1))],
                            ]),
-            front.Column([[front.Text("Relations Window Secondary")],
-             [front.Radio("Person", "Minor2", key="Person2"),
-              front.Radio("Mask", "Minor2", key="Mask2"),
-              front.Radio("Business", "Minor2", key="Business2")],
-             [front.Radio("Location", "Minor2", key="Location2"),
-              front.Radio("Group", "Minor2", key="Group2"),
-              front.Radio("City", "Minor2", key="City2"),
-              ],
-             [front.Listbox(values=minor_list, select_mode="single",
+            pg.Column([[pg.Text("Relations Window Secondary")],
+             second_1, second_2, second_3,
+             [pg.Listbox(values=minor_list, select_mode="single",
                             key="secondary_name", size=(40, 5))]])],
-             [front.Button("Done", disabled=False), front.Button("Event-test"),
-                front.Button("Create"), front.Button("Refresh")]
+             [pg.Button("Done", disabled=False), pg.Button("Event-test"),
+                pg.Button("Create"), pg.Button("Refresh")]
         )
-        self.window = front.Window("Persona Relations", layout, modal=True)
+        self.window = pg.Window("Persona Relations", layout, modal=True)
 
     def close(self):
         self.window.close()
@@ -109,7 +99,7 @@ class RelationWindow:
     def read(self):
         while True:
             event, values = self.window.read()
-            if event in (None, "Done", front.WIN_CLOSED):
+            if event in (None, "Done", pg.WIN_CLOSED):
                 break
             elif event == "Create":
                 self.create_relationship(values)

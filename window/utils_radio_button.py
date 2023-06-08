@@ -1,3 +1,4 @@
+import PySimpleGUI as pg
 
 
 class RadioButtonUtils:
@@ -17,6 +18,28 @@ class RadioButtonUtils:
             returnThis = "Group"
         elif values["City" + section]:
             returnThis = "City"
+        elif values["Bloodline" + section]:
+            returnThis = "Bloodline"
+        elif values["Template" + section]:
+            returnThis = "Template"
+        elif values["Nation" + section]:
+            returnThis = "Nation"
 
         return returnThis
+    
+    @staticmethod
+    def set_minor_buttons(add_string = ""):
+        minor_string = "Minor" + add_string
+        line1 = [pg.Radio("Person", minor_string, key="Person" + add_string),
+             pg.Radio("Mask", minor_string, key="Mask" + add_string),
+             pg.Radio("Business", minor_string, key="Business" + add_string)]
+        line2 = [pg.Radio("Location", minor_string, key="Location" + add_string),
+             pg.Radio("Group", minor_string, key="Group" + add_string),
+             pg.Radio("City", minor_string, key="City" + add_string),
+             ]
+        line3 = [pg.Radio("Bloodline", minor_string, key="Bloodline" + add_string),
+            pg.Radio("Template", minor_string, key="Template" + add_string),
+            pg.Radio("Nation", minor_string, key="Nation" + add_string),
+            ]
+        return line1, line2, line3
 

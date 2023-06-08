@@ -8,6 +8,7 @@ class SeriesWindow:
     def __init__(self):
         front.theme("LightGreen10")
         self.db = N4J_DB()
+        buttons_1, buttons_2, buttons_3 = rb.set_minor_buttons()
 
         series_list = self.getSeriesTV()
         layout = (
@@ -19,13 +20,7 @@ class SeriesWindow:
             [front.Listbox(values=series_list, select_mode="single",
                            key="series_name", size=(40, 5))],
             [front.Text("Add:")],
-            [front.Radio("Person", "Minor", key="Person"),
-             front.Radio("Mask", "Minor", key="Mask"),
-             front.Radio("Business", "Minor", key="Business")],
-            [front.Radio("Location", "Minor", key="Location"),
-             front.Radio("Group", "Minor", key="Group"),
-             front.Radio("City", "Minor", key="City"),
-             ],
+            buttons_1, buttons_2, buttons_3,
             [front.InputText(key="MinorName")],
             [front.Button("Done", disabled=False), front.Button("Event-test"),
                 front.Button("Create"), front.Button("Refresh")]
