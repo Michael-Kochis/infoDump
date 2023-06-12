@@ -1,14 +1,15 @@
 import PySimpleGUI as front
 
-from window.utils_radio_button import RadioButtonUtils as rb
+import window.node_select as ns
 from n4j_db.n4j_db import N4J_DB
+
 from n4j_db.n4j_cypher_builder import CypherBuilder
 
 class SeriesWindow:
     def __init__(self):
         front.theme("LightGreen10")
         self.db = N4J_DB()
-        buttons_1, buttons_2, buttons_3, buttons_4 = rb.set_minor_buttons()
+        buttons_1 = ns.NodeSelectWindow.node_select_layout()
 
         series_list = self.getSeriesTV()
         layout = (
@@ -21,7 +22,7 @@ class SeriesWindow:
             [front.Listbox(values=series_list, select_mode="single",
                            key="series_name", size=(40, 5))],
             [front.Text("Add:")],
-            buttons_1, buttons_2, buttons_3, buttons_4,
+            buttons_1,
             [front.InputText(key="MinorName")],
             [front.Button("Done", disabled=False), front.Button("Event-test"),
                 front.Button("Create"), front.Button("Refresh")]
@@ -34,7 +35,7 @@ class SeriesWindow:
         series = ""
         if len(values["series_name"]) > 0:
             series = values["series_name"][0]
-        minor_type = rb.getMinor(values)
+        minor_type = values["node_label"][0][0]
         if series in (None, ""):
             print("No series selected.")
         elif values["TV"]:

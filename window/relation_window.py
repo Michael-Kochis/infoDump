@@ -1,6 +1,6 @@
 import PySimpleGUI as pg
 
-from window.utils_radio_button import RadioButtonUtils as rb
+import window.node_select as ns
 from n4j_db.n4j_db import N4J_DB
 from n4j_db.n4j_cypher_builder import CypherBuilder
 
@@ -11,11 +11,11 @@ class RelationWindow:
 
         minor_list = self.getPerson()
         relation_list = self.getAllRelations()
-        minor_1, minor_2, minor_3, minor_4 = rb.set_minor_buttons("")
-        second_1, second_2, second_3, second_4 = rb.set_minor_buttons("2")
+        minor_1 = ns.NodeSelectWindow.node_select_layout()
+        second_1 = ns.NodeSelectWindow.node_select_layout("2")
 
         layout = ([pg.Column([[pg.Text("Relations Window Primary")],
-            minor_1, minor_2, minor_3, minor_4,
+            minor_1,
             [pg.Listbox(values=minor_list, select_mode="single",
                            key="primary_name", size=(40, 5))]]),
              pg.Column([[pg.Text("Relationship")],
@@ -27,7 +27,7 @@ class RelationWindow:
                             pg.InputText(key="var2_value", size=(28,1))],
                            ]),
             pg.Column([[pg.Text("Relations Window Secondary")],
-             second_1, second_2, second_3, second_4,
+             second_1,
              [pg.Listbox(values=minor_list, select_mode="single",
                             key="secondary_name", size=(40, 5))]])],
              [pg.Button("Done", disabled=False), pg.Button("Event-test"),
@@ -40,9 +40,9 @@ class RelationWindow:
         self.db.close()
 
     def create_relationship(self, values):
-        atype = rb.getMinor(values)
+        atype = values["node_label"][0][0]
         aname = ""
-        btype = rb.getMinor(values, "2")
+        btype = values["node_label2"][0][0]
         bname = ""
         rtype = ""
         if len(values["primary_name"]) > 0:
@@ -52,14 +52,18 @@ class RelationWindow:
         if len(values["secondary_name"]) > 0:
             bname = values["secondary_name"][0]
 
+        rel_props = []
+        if values["var1_name"] not in (None, ""):
+            rel_props.append((values["var1_name"], values["var1_value"]))
+        if values["var2_name"] not in (None, ""):
+            rel_props.append((values["var2_name"], values["var2_value"]))
+
         if not (aname in (None, "")) and not (bname in (None, "")) \
             and not (atype in (None, "")) and not (btype in (None, "")):
             response, summary, keys = self.db.driver.execute_query(
                 CypherBuilder().merge_line("a", atype, "aname")
                     .merge_line("b", btype, "bname")
-                    .relation_complex("a", "b", rtype,
-                        [(values["var1_name"], values["var1_value"]),
-                         (values["var2_name"], values["var2_value"])])
+                    .relation_complex("a", "b", rtype, rel_props)
                     .return_line().text(),
                 aname=aname,
                 bname=bname
@@ -84,6 +88,18 @@ class RelationWindow:
     def getPerson(self):
         return self.getList("Person")
 
+    def getAllNodes(self):
+        returnThis =[]
+        response, summary, keys = self.db.driver.execute_query(
+            CypherBuilder().custom_line("""MATCH (n) 
+                RETURN DISTINCT TYPE(n) AS name;""").text()
+        )
+        for record in response:
+            returnThis.append(record.data().get("name"))
+        returnThis.sort()
+
+        return returnThis
+
     def getAllRelations(self):
         returnThis =[]
         response, summary, keys = self.db.driver.execute_query(
@@ -105,7 +121,7 @@ class RelationWindow:
                 self.create_relationship(values)
             elif event == "Event-test":
                 print(event)
-                print(rb.getMinor(values))
+                print(values["node_label"][0][0])
                 if len(values["primary_name"]) > 0:
                     print(values["primary_name"][0])
                 if len(values["relation_selected"]):
@@ -124,12 +140,13 @@ class RelationWindow:
         self.close()
 
     def refresh(self, values):
-        node_type = rb.getMinor(values)
-        neo_list = self.getList(node_type)
-        self.window["primary_name"].Update(neo_list)
+        node_type = values["node_label"][0][0]
+        node_type2 = values["node_label2"][0][0]
 
-        node_type2 = rb.getMinor(values, "2")
+        neo_list = self.getList(node_type)
         neo_list2 = self.getList(node_type2)
+
+        self.window["primary_name"].Update(neo_list)
         self.window["secondary_name"].Update(neo_list2)
 
         self.window["relation_selected"].Update(self.getAllRelations())
