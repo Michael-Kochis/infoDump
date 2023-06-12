@@ -25,6 +25,8 @@ class RelationWindow:
                             pg.InputText(key="var1_value", size=(28, 1))],
                            [pg.InputText(key="var2_name", size=(10,1)),
                             pg.InputText(key="var2_value", size=(28,1))],
+                           [pg.InputText(key="var3_name", size=(10,1)),
+                            pg.InputText(key="var3_value", size=(28,1))]
                            ]),
             pg.Column([[pg.Text("Relations Window Secondary")],
              second_1,
@@ -57,6 +59,8 @@ class RelationWindow:
             rel_props.append((values["var1_name"], values["var1_value"]))
         if values["var2_name"] not in (None, ""):
             rel_props.append((values["var2_name"], values["var2_value"]))
+        if values["var3_name"] not in (None, ""):
+            rel_props.append((values["var3_name"], values["var3_value"]))
 
         if not (aname in (None, "")) and not (bname in (None, "")) \
             and not (atype in (None, "")) and not (btype in (None, ""))\

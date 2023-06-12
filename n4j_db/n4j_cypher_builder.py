@@ -49,7 +49,6 @@ class CypherBuilder:
             self.string += " { "
             iterations = 0
             loops = len(prop_list)
-            print(loops)
             for entry in prop_list:
                 iterations += 1
                 if not(entry[0] in (None, "")) and not(entry[1] in (None, "")):
