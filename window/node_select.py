@@ -15,7 +15,13 @@ class NodeSelectWindow:
                 RETURN DISTINCT labels(n) AS name;""").text()
         )
         for record in response:
-            returnThis.append(record.data().get("name"))
+            labels = record.data().get("name")
+            if not labels in (None, ""):
+                for label in labels:
+                    if not label in returnThis:
+                        print(label)
+                        returnThis.append(label)
+
         returnThis.sort()
 
         return returnThis

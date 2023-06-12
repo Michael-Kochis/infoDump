@@ -35,7 +35,7 @@ class SeriesWindow:
         series = ""
         if len(values["series_name"]) > 0:
             series = values["series_name"][0]
-        minor_type = values["node_label"][0][0]
+        minor_type = values["node_label"][0]
         if series in (None, ""):
             print("No series selected.")
         elif values["TV"]:
@@ -87,7 +87,7 @@ class SeriesWindow:
                 if len(values["series_name"]) > 0:
                     print(values["series_name"][0])
                 print(values["MinorName"])
-                print(rb.getMinor(values))
+                print(values["node_label"][0])
             elif event == "Refresh":
                 self.refresh(values)
             else:

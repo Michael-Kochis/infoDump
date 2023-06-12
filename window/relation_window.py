@@ -42,9 +42,9 @@ class RelationWindow:
         self.db.close()
 
     def create_relationship(self, values):
-        atype = values["node_label"][0][0]
+        atype = values["node_label"][0]
         aname = ""
-        btype = values["node_label2"][0][0]
+        btype = values["node_label2"][0]
         bname = ""
         rtype = ""
         if len(values["primary_name"]) > 0:
@@ -126,7 +126,7 @@ class RelationWindow:
                 self.create_relationship(values)
             elif event == "Event-test":
                 print(event)
-                print(values["node_label"][0][0])
+                print(values["node_label"][0])
                 if len(values["primary_name"]) > 0:
                     print(values["primary_name"][0])
                 if len(values["relation_selected"]):
@@ -145,8 +145,8 @@ class RelationWindow:
         self.close()
 
     def refresh(self, values):
-        node_type = values["node_label"][0][0]
-        node_type2 = values["node_label2"][0][0]
+        node_type = values["node_label"][0]
+        node_type2 = values["node_label2"][0]
 
         neo_list = self.getList(node_type)
         neo_list2 = self.getList(node_type2)
