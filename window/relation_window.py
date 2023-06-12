@@ -59,7 +59,8 @@ class RelationWindow:
             rel_props.append((values["var2_name"], values["var2_value"]))
 
         if not (aname in (None, "")) and not (bname in (None, "")) \
-            and not (atype in (None, "")) and not (btype in (None, "")):
+            and not (atype in (None, "")) and not (btype in (None, ""))\
+            and not (rtype in (None, "")):
             response, summary, keys = self.db.driver.execute_query(
                 CypherBuilder().merge_line("a", atype, "aname")
                     .merge_line("b", btype, "bname")
