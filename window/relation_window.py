@@ -126,6 +126,8 @@ class RelationWindow:
                 break
             elif event in ("node_label", "node_label2", "Refresh"):
                 self.refresh(values)
+            elif event in ("primary_name", "secondary_name"):
+                pass
             elif event == "Create":
                 self.create_relationship(values)
             elif event == "Event-test":
