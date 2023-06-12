@@ -8,7 +8,7 @@ class SeriesWindow:
     def __init__(self):
         front.theme("LightGreen10")
         self.db = N4J_DB()
-        buttons_1, buttons_2, buttons_3 = rb.set_minor_buttons()
+        buttons_1, buttons_2, buttons_3, buttons_4 = rb.set_minor_buttons()
 
         series_list = self.getSeriesTV()
         layout = (
@@ -21,7 +21,7 @@ class SeriesWindow:
             [front.Listbox(values=series_list, select_mode="single",
                            key="series_name", size=(40, 5))],
             [front.Text("Add:")],
-            buttons_1, buttons_2, buttons_3,
+            buttons_1, buttons_2, buttons_3, buttons_4,
             [front.InputText(key="MinorName")],
             [front.Button("Done", disabled=False), front.Button("Event-test"),
                 front.Button("Create"), front.Button("Refresh")]

@@ -11,11 +11,11 @@ class RelationWindow:
 
         minor_list = self.getPerson()
         relation_list = self.getAllRelations()
-        minor_1, minor_2, minor_3 = rb.set_minor_buttons("")
-        second_1, second_2, second_3 = rb.set_minor_buttons("2")
+        minor_1, minor_2, minor_3, minor_4 = rb.set_minor_buttons("")
+        second_1, second_2, second_3, second_4 = rb.set_minor_buttons("2")
 
         layout = ([pg.Column([[pg.Text("Relations Window Primary")],
-            minor_1, minor_2, minor_3,
+            minor_1, minor_2, minor_3, minor_4,
             [pg.Listbox(values=minor_list, select_mode="single",
                            key="primary_name", size=(40, 5))]]),
              pg.Column([[pg.Text("Relationship")],
@@ -27,7 +27,7 @@ class RelationWindow:
                             pg.InputText(key="var2_value", size=(28,1))],
                            ]),
             pg.Column([[pg.Text("Relations Window Secondary")],
-             second_1, second_2, second_3,
+             second_1, second_2, second_3, second_4,
              [pg.Listbox(values=minor_list, select_mode="single",
                             key="secondary_name", size=(40, 5))]])],
              [pg.Button("Done", disabled=False), pg.Button("Event-test"),

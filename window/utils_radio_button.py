@@ -24,6 +24,12 @@ class RadioButtonUtils:
             returnThis = "Template"
         elif values["Nation" + section]:
             returnThis = "Nation"
+        elif values["Address" + section]:
+            returnThis = "Address"
+        elif values["Position" + section]:
+            returnThis = "Position"
+        elif values["Title" + section]:
+            returnThis = "Title"
 
         return returnThis
     
@@ -41,5 +47,9 @@ class RadioButtonUtils:
             pg.Radio("Template", minor_string, key="Template" + add_string),
             pg.Radio("Nation", minor_string, key="Nation" + add_string),
             ]
-        return line1, line2, line3
+        line4 = [pg.Radio("Address", minor_string, key="Address" + add_string),
+                 pg.Radio("Position", minor_string, key="Position" + add_string),
+                 pg.Radio("Title", minor_string, key="Title" + add_string)
+            ]
+        return line1, line2, line3, line4
 
