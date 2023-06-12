@@ -19,7 +19,6 @@ class NodeSelectWindow:
             if not labels in (None, ""):
                 for label in labels:
                     if not label in returnThis:
-                        print(label)
                         returnThis.append(label)
 
         returnThis.sort()
@@ -30,7 +29,8 @@ class NodeSelectWindow:
     def node_select_layout(add_string=""):
         node_list = NodeSelectWindow.get_nodes()
         layout = [pg.Listbox(values=node_list, select_mode="single",
-                           key="node_label" + add_string, size=(40, 5))]
+                    enable_events=True, key="node_label" + add_string,
+                    size=(40, 5))]
         return layout
 
 if __name__ == "__main__":

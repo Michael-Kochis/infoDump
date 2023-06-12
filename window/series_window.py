@@ -14,11 +14,11 @@ class SeriesWindow:
         series_list = self.getSeriesTV()
         layout = (
             [front.Text("Series Window")],
-            [front.Radio("TV", "Series", default=True, key="TV"),
-             front.Radio("Movie", "Series", key="Movie"),
-             front.Radio("Comic", "Series", key="Comic"),
-             front.Radio("Book", "Series", key="Book")],
-            [front.Radio("Universe", "Series", key="Universe")],
+            [front.Radio("TV", "Series", default=True, enable_events=True, key="TV"),
+             front.Radio("Movie", "Series", enable_events=True, key="Movie"),
+             front.Radio("Comic", "Series", enable_events=True, key="Comic"),
+             front.Radio("Book", "Series", enable_events=True, key="Book")],
+            [front.Radio("Universe", "Series", enable_events=True, key="Universe")],
             [front.Listbox(values=series_list, select_mode="single",
                            key="series_name", size=(40, 5))],
             [front.Text("Add:")],
@@ -80,6 +80,9 @@ class SeriesWindow:
             event, values = self.window.read()
             if event in (None, "Done", front.WIN_CLOSED):
                 break
+            elif event in ("Book", "Comic", "Movie",
+                "Refresh", "TV", "Universe"):
+                self.refresh(values)
             elif event == "Create":
                 self.create_record(values)
             elif event == "Event-test":
@@ -88,8 +91,6 @@ class SeriesWindow:
                     print(values["series_name"][0])
                 print(values["MinorName"])
                 print(values["node_label"][0])
-            elif event == "Refresh":
-                self.refresh(values)
             else:
                 print(event)
         self.close()
