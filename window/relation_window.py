@@ -15,10 +15,14 @@ class RelationWindow:
         second_1 = ns.NodeSelectWindow.node_select_layout("2")
 
         layout = ([pg.Column([[pg.Text("Relations Window Primary")],
+            [pg.Radio("Existing", "NeoNode", default=True, key="node_exist")],
             minor_1,
             [pg.Listbox(values=minor_list, select_mode="single",
                         key="primary_name", enable_events=True,
-                        size=(40, 5))]]),
+                        size=(40, 5))],
+            [pg.Radio("New Item", "NeoNode", key="new_node")],
+            [pg.InputText(key="new_node_name", size=(40, 1))]]
+            ),
              pg.Column([[pg.Text("Relationship")],
                 [pg.Listbox(values=relation_list, select_mode="single",
                     key="relation_selected", size=(40,5))],
@@ -43,9 +47,21 @@ class RelationWindow:
         self.window.close()
         self.db.close()
 
-    def create_relationship(self, values):
+    def create_new_node(self, ntype, nname):
+        if ntype not in (None, "") and not nname in (None, ""):
+            response, summary, keys = self.db.driver.execute_query(
+                CypherBuilder().merge_line("n", ntype, "neoName")
+                    .return_line().text(),
+                neoName=nname
+            )
+            for record in response:
+                n1 = record.data().get("n").get("name")
+                print("Node", n1, "added to database.")
+        else:
+            print("Missing critical values")
+
+    def create_relationship(self, values, aname=""):
         atype = values["node_label"][0]
-        aname = ""
         btype = values["node_label2"][0]
         bname = ""
         rtype = ""
@@ -129,7 +145,17 @@ class RelationWindow:
             elif event in ("primary_name", "secondary_name"):
                 pass
             elif event == "Create":
-                self.create_relationship(values)
+                if values["node_exist"]:
+                    self.create_relationship(values)
+                elif values["new_node"]:
+                    if len(values["node_label"]) > 0:
+                        node_type = values["node_label"][0]
+                        node_name = values["new_node_name"]
+                        self.create_new_node(node_type, node_name)
+                    else:
+                        print("Missing node type.")
+                else:
+                    print("Invalid value")
             elif event == "Event-test":
                 print(event)
                 print(values["node_label"][0])

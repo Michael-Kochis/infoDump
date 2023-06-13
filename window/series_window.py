@@ -80,6 +80,8 @@ class SeriesWindow:
             event, values = self.window.read()
             if event in (None, "Done", front.WIN_CLOSED):
                 break
+            elif event in ("node_label"):
+                pass
             elif event in ("Book", "Comic", "Movie",
                 "Refresh", "TV", "Universe"):
                 self.refresh(values)
