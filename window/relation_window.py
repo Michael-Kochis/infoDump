@@ -65,12 +65,12 @@ class RelationWindow:
         btype = values["node_label2"][0]
         bname = ""
         rtype = ""
-        if len(values["primary_name"]) > 0:
-            aname = values["primary_name"][0]
+        if len(values["section_name"]) > 0:
+            aname = values["section_name"][0]
         if len(values["relation_selected"]):
             rtype = values["relation_selected"][0]
-        if len(values["secondary_name"]) > 0:
-            bname = values["secondary_name"][0]
+        if len(values["section_name2"]) > 0:
+            bname = values["section_name2"][0]
 
         rel_props = []
         if values["var1_name"] not in (None, ""):
@@ -147,7 +147,7 @@ class RelationWindow:
             elif event in ("Refresh"):
                 self.refresh(values, "")
                 self.refresh(values, "2")
-            elif event in ("primary_name", "secondary_name"):
+            elif event in ("section_name", "section_name2"):
                 pass
             elif event == "Create":
                 if values["node_exist"]:
