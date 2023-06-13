@@ -18,7 +18,7 @@ class RelationWindow:
             [pg.Radio("Existing", "NeoNode", default=True, key="node_exist")],
             minor_1,
             [pg.Listbox(values=minor_list, select_mode="single",
-                        key="primary_name", enable_events=True,
+                        key="section_name", enable_events=True,
                         size=(40, 5))],
             [pg.Radio("New Item", "NeoNode", key="new_node")],
             [pg.InputText(key="new_node_name", size=(40, 1))]]
@@ -36,7 +36,7 @@ class RelationWindow:
             pg.Column([[pg.Text("Relations Window Secondary")],
              second_1,
              [pg.Listbox(values=minor_list, select_mode="single",
-                        enable_events=True, key="secondary_name",
+                        enable_events=True, key="section_name2",
                          size=(40, 5))]])],
              [pg.Button("Done", disabled=False), pg.Button("Event-test"),
                 pg.Button("Create"), pg.Button("Refresh")]
@@ -140,8 +140,13 @@ class RelationWindow:
             event, values = self.window.read()
             if event in (None, "Done", pg.WIN_CLOSED):
                 break
-            elif event in ("node_label", "node_label2", "Refresh"):
-                self.refresh(values)
+            elif event in ("node_label"):
+                self.refresh(values, "")
+            elif event in ("node_label2"):
+                self.refresh(values, "2")
+            elif event in ("Refresh"):
+                self.refresh(values, "")
+                self.refresh(values, "2")
             elif event in ("primary_name", "secondary_name"):
                 pass
             elif event == "Create":
@@ -173,20 +178,14 @@ class RelationWindow:
                 print(event)
         self.close()
 
-    def refresh(self, values):
-        if values["node_label"] == []:
-            values["node_label"].append("Person")
-        if values["node_label2"] == []:
-            values["node_label2"].append("Person")
-        node_type = values["node_label"][0]
-        node_type2 = values["node_label2"][0]
+    def refresh(self, values, section=""):
+        if values["node_label" + section] == []:
+            values["node_label" + section].append("Person")
+        node_type = values["node_label" + section][0]
 
         neo_list = self.getList(node_type)
-        neo_list2 = self.getList(node_type2)
 
-        self.window["primary_name"].Update(neo_list)
-        self.window["secondary_name"].Update(neo_list2)
-
+        self.window["section_name" + section].Update(neo_list)
         self.window["relation_selected"].Update(self.getAllRelations())
 
 if __name__ == "__main__":
