@@ -18,7 +18,8 @@ class SeriesWindow:
              front.Radio("Movie", "Series", enable_events=True, key="Movie"),
              front.Radio("Comic", "Series", enable_events=True, key="Comic"),
              front.Radio("Book", "Series", enable_events=True, key="Book")],
-            [front.Radio("Universe", "Series", enable_events=True, key="Universe")],
+            [front.Radio("Universe", "Series", enable_events=True, key="Universe"),
+             front.Radio("Game", "Series", enable_events=True, key="Game")],
             [front.Listbox(values=series_list, select_mode="single",
                            key="series_name", size=(40, 5))],
             [front.Text("Add:")],
@@ -69,6 +70,9 @@ class SeriesWindow:
     def getSeriesComic(self):
         return self.getSeries("Series_Comic")
 
+    def getSeriesGame(self):
+        return self.getSeries("Series_Game")
+
     def getSeriesMovie(self):
         return self.getSeries("Series_Movie")
 
@@ -109,6 +113,8 @@ class SeriesWindow:
             neo_list = self.getSeriesBook()
         elif values["Universe"]:
             neo_list = self.getSeries("Universe")
+        elif values["Game"]:
+            neo_list = self.getSeriesGame()
 
         self.window["series_name"].Update(neo_list)
 

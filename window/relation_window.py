@@ -94,7 +94,7 @@ class RelationWindow:
             for record in response:
                 a1 = record.data().get("a").get("name")
                 b1 = record.data().get("b").get("name")
-            print(a1, "has a", rtype, "relation with", b1C)
+            print(a1, "has a", rtype, "relation with", b1)
         else:
             print("Some critical value was missing")
 
