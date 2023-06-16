@@ -49,6 +49,8 @@ class SeriesWindow:
             self.db.common.within(minor_type, name, "Series_Book", series)
         elif values["Universe"]:
             self.db.common.within(minor_type, name, "Universe", series)
+        elif values["Game"]:
+            self.db.common.within(minor_type, name, "Series_Game", series)
         else:
             print("Something went wrong.")
 
@@ -87,7 +89,7 @@ class SeriesWindow:
             elif event in ("node_label"):
                 pass
             elif event in ("Book", "Comic", "Movie",
-                "Refresh", "TV", "Universe"):
+                "Refresh", "TV", "Universe", "Game"):
                 self.refresh(values)
             elif event == "Create":
                 self.create_record(values)
