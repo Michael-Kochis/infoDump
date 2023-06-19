@@ -80,23 +80,25 @@ class RelationWindow:
         if values["var3_name"] not in (None, ""):
             rel_props.append((values["var3_name"], values["var3_value"]))
 
-        if not (aname in (None, "")) and not (bname in (None, "")) \
-            and not (atype in (None, "")) and not (btype in (None, ""))\
-            and not (rtype in (None, "")):
-            response, summary, keys = self.db.driver.execute_query(
-                CypherBuilder().merge_line("a", atype, "aname")
-                    .merge_line("b", btype, "bname")
-                    .relation_complex("a", "b", rtype, rel_props)
-                    .return_line().text(),
-                aname=aname,
-                bname=bname
-            )
-            for record in response:
-                a1 = record.data().get("a").get("name")
-                b1 = record.data().get("b").get("name")
-            print(a1, "has a", rtype, "relation with", b1)
+        if rtype in (None, ""):
+            print("Relation not selected.")
         else:
-            print("Some critical value was missing")
+            if not (aname in (None, "")) and not (bname in (None, "")) \
+                and not (atype in (None, "")) and not (btype in (None, "")):
+                response, summary, keys = self.db.driver.execute_query(
+                    CypherBuilder().merge_line("a", atype, "aname")
+                        .merge_line("b", btype, "bname")
+                        .relation_complex("a", "b", rtype, rel_props)
+                        .return_line().text(),
+                    aname=aname,
+                    bname=bname
+                )
+                for record in response:
+                    a1 = record.data().get("a").get("name")
+                    b1 = record.data().get("b").get("name")
+                print(a1, "has a", rtype, "relation with", b1)
+            else:
+                print("Some critical value was missing")
 
 
     def getList(self, item_type):
