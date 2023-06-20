@@ -9,7 +9,7 @@ class SeriesWindow:
     def __init__(self):
         front.theme("LightGreen10")
         self.db = N4J_DB()
-        buttons_1 = ns.NodeSelectWindow.node_select_layout()
+        ns_layout = ns.NodeSelectWindow.node_select_layout()
 
         series_list = self.getSeriesTV()
         layout = (
@@ -23,10 +23,10 @@ class SeriesWindow:
             [front.Listbox(values=series_list, select_mode="single",
                            key="series_name", size=(40, 5))],
             [front.Text("Add:")],
-            buttons_1,
+            ns_layout,
             [front.InputText(key="MinorName")],
-            [front.Button("Done", disabled=False), front.Button("Event-test"),
-                front.Button("Create"), front.Button("Refresh")]
+            [front.Button("Done", disabled=False),
+                 front.Button("Create"), front.Button("Refresh")]
         )
         self.window = front.Window("Infodump Main", layout, modal=True)
 
@@ -93,12 +93,6 @@ class SeriesWindow:
                 self.refresh(values)
             elif event == "Create":
                 self.create_record(values)
-            elif event == "Event-test":
-                print(event)
-                if len(values["series_name"]) > 0:
-                    print(values["series_name"][0])
-                print(values["MinorName"])
-                print(values["node_label"][0])
             else:
                 print(event)
         self.close()

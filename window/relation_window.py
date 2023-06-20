@@ -38,7 +38,7 @@ class RelationWindow:
              [pg.Listbox(values=minor_list, select_mode="single",
                         enable_events=True, key="section_name2",
                          size=(40, 5))]])],
-             [pg.Button("Done", disabled=False), pg.Button("Event-test"),
+             [pg.Button("Done", disabled=False),
                 pg.Button("Create"), pg.Button("Refresh")]
         )
         self.window = pg.Window("Persona Relations", layout, modal=True)
@@ -167,19 +167,6 @@ class RelationWindow:
                         print("Missing node type.")
                 else:
                     print("Invalid value")
-            elif event == "Event-test":
-                print(event)
-                print(values["node_label"][0])
-                if len(values["primary_name"]) > 0:
-                    print(values["primary_name"][0])
-                if len(values["relation_selected"]):
-                    print(values["relation_selected"][0])
-                if values["var1_name"] != "":
-                    print(values["var1_name"], ":", values["var1_value"])
-                if values["var2_name"] != "":
-                    print(values["var2_name"], ":", values["var2_value"])
-                if len(values["secondary_name"]) > 0:
-                    print(values["secondary_name"][0])
             else:
                 print(event)
         self.close()
