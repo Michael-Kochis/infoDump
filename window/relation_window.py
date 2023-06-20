@@ -39,6 +39,7 @@ class RelationWindow:
                         enable_events=True, key="section_name2",
                          size=(40, 5))]])],
              [pg.Button("Done", disabled=False), pg.Button("Delete"),
+                pg.Button("Rename"),
                 pg.Button("Create"), pg.Button("Refresh")]
         )
         self.window = pg.Window("Persona Relations", layout, modal=True)
@@ -101,15 +102,19 @@ class RelationWindow:
                 print("Some critical value was missing")
 
     def delete_node(self, values):
-        atype = values["node_label"][0]
-        if len(values["section_name"]) > 0:
-            aname = values["section_name"][0]
+        atype, aname = self.get_atype_aname(values)
         respons, summary, keys = self.db.driver.execute_query(
             CypherBuilder().match_line("n", atype, "dname")
                 .custom_line("DETACH DELETE n;").text(),
             dname=aname
         )
         print(atype, aname, "has been deleted.")
+
+    def get_atype_aname(self, values):
+        atype = values["node_label"][0]
+        if len(values["section_name"]) > 0:
+            aname = values["section_name"][0]
+        return atype, aname
 
     def getList(self, item_type):
         returnThis =[]
@@ -177,6 +182,8 @@ class RelationWindow:
                         print("Missing node type.")
                 else:
                     print("Invalid value")
+            elif event == "Rename":
+                self.rename_node(values)
             elif event == "Delete":
                 self.delete_node(values);
             else:
@@ -192,6 +199,19 @@ class RelationWindow:
 
         self.window["section_name" + section].Update(neo_list)
         self.window["relation_selected"].Update(self.getAllRelations())
+
+    def rename_node(self, values):
+        atype, aname = self.get_atype_aname(values)
+        neo_name = values["new_node_name"]
+        results, summary, keys = self.db.driver.execute_query(
+            CypherBuilder().match_line("n", atype, "nname")
+                .custom_line("SET n.name = \"" + neo_name + "\"")
+                .return_line().text(),
+            nname=aname
+        )
+        for record in results:
+            n1 = record.data().get("n").get("name")
+        print("Record", n1, "has been updated.")
 
 if __name__ == "__main__":
     window = RelationWindow()
