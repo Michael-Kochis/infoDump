@@ -38,7 +38,7 @@ class RelationWindow:
              [pg.Listbox(values=minor_list, select_mode="single",
                         enable_events=True, key="section_name2",
                          size=(40, 5))]])],
-             [pg.Button("Done", disabled=False),
+             [pg.Button("Done", disabled=False), pg.Button("Delete"),
                 pg.Button("Create"), pg.Button("Refresh")]
         )
         self.window = pg.Window("Persona Relations", layout, modal=True)
@@ -100,6 +100,16 @@ class RelationWindow:
             else:
                 print("Some critical value was missing")
 
+    def delete_node(self, values):
+        atype = values["node_label"][0]
+        if len(values["section_name"]) > 0:
+            aname = values["section_name"][0]
+        respons, summary, keys = self.db.driver.execute_query(
+            CypherBuilder().match_line("n", atype, "dname")
+                .custom_line("DETACH DELETE n;").text(),
+            dname=aname
+        )
+        print(atype, aname, "has been deleted.")
 
     def getList(self, item_type):
         returnThis =[]
@@ -167,6 +177,8 @@ class RelationWindow:
                         print("Missing node type.")
                 else:
                     print("Invalid value")
+            elif event == "Delete":
+                self.delete_node(values);
             else:
                 print(event)
         self.close()
