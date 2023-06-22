@@ -20,6 +20,17 @@ class N4JLogin:
     def close(self):
         self.driver.close()
 
+    def get_login_roles(self, login):
+        returnList = []
+        response, summary, keys = self.driver.execute_query(
+            CypherBuilder().match_line("u", "Login", "uname")
+                .return_line().text(),
+            uname=login
+        )
+        for record in response:
+            returnList.append(record.data().get("u").get("role"))
+        return returnList
+
     def login(self, login, password):
         pcrypt = None
         response, summary, keys = self.driver.execute_query(

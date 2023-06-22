@@ -5,6 +5,8 @@ from window.series_window import SeriesWindow
 from window.relation_window import RelationWindow
 
 class MainInfodumpWindow:
+    login_role = []
+
     def __init__(self):
         front.theme("LightGreen10")
         layout = (
@@ -16,6 +18,12 @@ class MainInfodumpWindow:
         )
         self.window = front.Window("Infodump Main", layout)
         self.db = N4J_DB()
+
+    def get_login_roles(self, values):
+        if self.db.login.login_exists(values["login"]):
+            return self.db.login.get_login_roles(values["login"])
+        else:
+            return []
 
     def read(self):
 
@@ -29,18 +37,26 @@ class MainInfodumpWindow:
                     self.window["loginStatus"].Update("Login already exists.")
                 else:
                     self.db.login.register_login(values["login"], values["password"], "Player")
-                    self.window["loginStatus"].Update("Login created:", values["login"])
+                    self.window["loginStatus"].Update("Login created:" + values["login"])
             if event in ("Login"):
-                if self.db.login.login_exists(values["login"]):
-                    if self.db.login.login(values["login"], values["password"]):
-                        self.window["loginStatus"].Update("MATCH!")
-                        SeriesWindow().read()
-                        RelationWindow().read()
+                self.do_login(values)
 
-                    else:
-                        self.window["loginStatus"].Update("Something went wrong.")
+    def do_login(self, values):
+        if self.db.login.login_exists(values["login"]):
+            if self.db.login.login(values["login"], values["password"]):
+                self.window["loginStatus"].Update("MATCH!")
+                self.login_role = self.get_login_roles(values)
+                if "DB_Admin" in self.login_role:
+                    SeriesWindow().read()
+                    RelationWindow().read()
                 else:
-                    self.window["loginStatus"].Update("Login does not exist")
+                    print("No recognized role.")
+                    print(self.login_role)
+
+            else:
+                self.window["loginStatus"].Update("Something went wrong.")
+        else:
+            self.window["loginStatus"].Update("Login does not exist")
 
     def close(self):
         self.window.close()
