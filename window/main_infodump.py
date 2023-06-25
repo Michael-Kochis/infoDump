@@ -49,6 +49,8 @@ class MainInfodumpWindow:
                 if "DB_Admin" in self.login_role:
                     SeriesWindow().read()
                     RelationWindow().read()
+                elif "Player" in self.login_role:
+                    print("This is where we would open Game Selection Window")
                 else:
                     print("No recognized role.")
                     print(self.login_role)
