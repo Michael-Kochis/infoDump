@@ -53,7 +53,8 @@ class MainPlayerWindow:
             CypherBuilder().match_all_line("g", "GameInstance")
               .match_line("l", "Login", "lname")
               .match_all_line("gi", "PlayerGameInfo")
-              .custom_line("WHERE NOT (gi)-[:PLAYER]->(l)")
+              .custom_line("WHERE gi.name STARTS WITH \"" + login + "\"")
+              .custom_line("AND NOT (gi)-[:GAME]->(g)")
               .return_line().text(),
             lname=login
         )
@@ -73,14 +74,17 @@ class MainPlayerWindow:
             elif event in ("active_game"):
                 self.window["potential_game"].update(set_to_index=[])
             elif event == "Refresh":
-                self.window["active_game"].update(set_to_index=[])
-                self.window["potential_game"].update(set_to_index=[])
-                self.window["MinorName"].update("")
+                self.refresh()
             elif event == "Create":
                 self.create_record(values)
             else:
                 print(event)
         self.close()
+
+    def refresh(self):
+        self.window["active_game"].update(set_to_index=[])
+        self.window["potential_game"].update(set_to_index=[])
+        self.window["MinorName"].update("")
 
 
 if __name__ == "__main__":
