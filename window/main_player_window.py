@@ -16,12 +16,12 @@ class MainPlayerWindow:
         potential_games_list = self.getPotentialGames(login)
         layout = (
             [front.Text("Game Selefction Window")],
-
             [front.Listbox(values=games_list, select_mode="single",
-                           key="active_game", size=(40, 5))],
+                          enable_events=True, key="active_game", size=(40, 5))],
             [front.Text("Add:")],
             [front.Listbox(values=potential_games_list, select_mode="single",
-                          key="potential_game", size=(40,5))],
+                          enable_events=True, key="potential_game", size=(40,5))],
+            [front.Text("Use Alias")],
             [front.InputText(key="MinorName")],
             [front.Button("Done", disabled=False),
                  front.Button("Create"), front.Button("Refresh")]
@@ -50,9 +50,10 @@ class MainPlayerWindow:
     def getPotentialGames(self, login):
         returnThis = []
         response, summary, keys = self.db.driver.execute_query(
-            CypherBuilder().match_all_line("g", "PlayerGameInfo")
+            CypherBuilder().match_all_line("g", "GameInstance")
               .match_line("l", "Login", "lname")
-              .custom_line("WHERE NOT (g)-[:PLAYER]->(l)")
+              .match_all_line("gi", "PlayerGameInfo")
+              .custom_line("WHERE NOT (gi)-[:PLAYER]->(l)")
               .return_line().text(),
             lname=login
         )
@@ -67,8 +68,14 @@ class MainPlayerWindow:
             event, values = self.window.read()
             if event in (None, "Done", front.WIN_CLOSED):
                 break
-            elif event in ("node_label"):
-                pass
+            elif event in ("potential_game"):
+                self.window["active_game"].update(set_to_index=[])
+            elif event in ("active_game"):
+                self.window["potential_game"].update(set_to_index=[])
+            elif event == "Refresh":
+                self.window["active_game"].update(set_to_index=[])
+                self.window["potential_game"].update(set_to_index=[])
+                self.window["MinorName"].update("")
             elif event == "Create":
                 self.create_record(values)
             else:
