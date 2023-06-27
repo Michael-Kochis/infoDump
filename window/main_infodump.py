@@ -1,6 +1,7 @@
 import PySimpleGUI as front
 
 from n4j_db.n4j_db import N4J_DB
+from window.main_player_window import MainPlayerWindow
 from window.series_window import SeriesWindow
 from window.relation_window import RelationWindow
 
@@ -49,8 +50,9 @@ class MainInfodumpWindow:
                 if "DB_Admin" in self.login_role:
                     SeriesWindow().read()
                     RelationWindow().read()
+                    MainPlayerWindow().read()
                 elif "Player" in self.login_role:
-                    print("This is where we would open Game Selection Window")
+                    MainPlayerWindow().read()
                 else:
                     print("No recognized role.")
                     print(self.login_role)
