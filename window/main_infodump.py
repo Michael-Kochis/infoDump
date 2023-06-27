@@ -50,9 +50,9 @@ class MainInfodumpWindow:
                 if "DB_Admin" in self.login_role:
                     SeriesWindow().read()
                     RelationWindow().read()
-                    MainPlayerWindow().read()
+                    MainPlayerWindow(values["login"]).read()
                 elif "Player" in self.login_role:
-                    MainPlayerWindow().read()
+                    MainPlayerWindow(values["login"]).read()
                 else:
                     print("No recognized role.")
                     print(self.login_role)
