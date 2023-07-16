@@ -13,7 +13,7 @@ from os import environ
 class N4J_DB:
     def __init__(self):
         load_dotenv()
-
+x
         URI = environ.get("URI")
         AUTH = (environ.get("N4USER"), environ.get("N4PASS"))
 
