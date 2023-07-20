@@ -8,7 +8,7 @@ from n4j_db.n4j_db import N4J_DB
 from n4j_db.n4j_cypher_builder import CypherBuilder
 
 class SFSpeciesCreationWindow():
-    eng_types = ["Inertialess Engine", "Tactical Engine"]
+    eng_types = ["Inertialess Engines", "Tactical Drive"]
     gov_types = ["Player"]
     srw_list = ["Energy Beam", "Laser", "Sprint Missile"]
     lrw_list = ["Force Beam", "Plasma Torpedo", "Regular Missile"]
@@ -74,7 +74,6 @@ class SFSpeciesCreationWindow():
             elif event in ("K3 Select"):
                 print("K3 Select Pressed")
             elif event in ("Reset"):
-                print("Reset Pressed")
                 self.set_defaults()
             elif event in ("Create"):
                 print("Create Pressed")
