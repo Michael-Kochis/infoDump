@@ -115,6 +115,7 @@ class SeriesWindow:
         self.window["series_name"].Update(neo_list)
 
     def close(self):
+        self.db.close()
         self.window.close()
 
 
