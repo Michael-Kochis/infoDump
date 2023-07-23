@@ -34,11 +34,18 @@ class SeriesWindow:
         name = values["MinorName"]
 
         series = ""
+        minor_type = ""
         if len(values["series_name"]) > 0:
             series = values["series_name"][0]
-        minor_type = values["node_label"][0]
+        if values["node_label"] in (None, "", []):
+            pass
+        else:
+            minor_type = values["node_label"][0]
+
         if series in (None, ""):
             print("No series selected.")
+        elif minor_type in (None, ""):
+            print("Node type not selected")
         elif values["TV"]:
             self.db.common.within(minor_type, name, "Series_TV", series)
         elif values["Movie"]:
