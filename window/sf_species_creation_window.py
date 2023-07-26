@@ -10,8 +10,8 @@ from n4j_db.n4j_cypher_builder import CypherBuilder
 class SFSpeciesCreationWindow():
     eng_types = ["Inertialess Engines", "Tactical Drive"]
     gov_types = ["Player"]
-    srw_list = ["Energy Beam", "Laser", "Sprint Missile"]
-    lrw_list = ["Force Beam", "Plasma Torpedo", "Regular Missile"]
+    srw_list = ["Energy Beam", "Force Beam", "Laser", "X-Ray Laser"]
+    lrw_list = ["Kinetic Weapon", "Plasma Torpedo", "Regular Missile"]
 
     def __init__(self):
         ps.theme("LightGreen10")
