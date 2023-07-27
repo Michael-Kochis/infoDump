@@ -13,7 +13,7 @@ class MainInfodumpWindow:
         layout = (
             [front.Text("Infodump")],
             [front.Text("   Login   "),front.InputText(key='login')],
-            [front.Text("Password"), front.InputText(key='password')],
+            [front.Text("Password"), front.InputText(key='password', password_char='*')],
             [front.Text("Login Not Attempted", key='loginStatus')],
             [front.Button("Login"), front.Button("Register"), front.Button("Cancel")]
         )

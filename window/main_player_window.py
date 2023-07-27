@@ -32,6 +32,32 @@ class MainPlayerWindow:
         self.db.close()
         self.window.close()
 
+    def create_record(self, values):
+        game_target = ""
+        if len(values["potential_game"]) > 0:
+            game_target = values["potential_game"][0]
+        if game_target in (None, ""):
+            print("Missing game selection")
+        else:
+            gi_name = self.login + " : " + game_target
+            response, summary, keys = self.db.driver.execute_query(
+                CypherBuilder().match_line("g", "GameInstance", "gname")
+                .match_line("l", "Login", "lname")
+                .merge_line("gi", "PlayerGameInfo", "giname")
+                .relation_basic("gi", "l", "PLAYER")
+                .relation_basic("gi", "g", "GAME")
+                 .return_line().text(),
+                gname=game_target,
+                giname=gi_name,
+                lname=self.login
+            )
+            l = ""
+            g1 = ""
+            for record in response:
+                g1 = record.data().get("g").get("name")
+                l = record.data().get("l").get("name")
+            print("Login " + l + " has joined game " + g1)
+
     def getActiveGames(self, login):
         returnThis = []
         response, summary, keys = self.db.driver.execute_query(
@@ -53,14 +79,15 @@ class MainPlayerWindow:
             CypherBuilder().match_all_line("g", "GameInstance")
               .match_line("l", "Login", "lname")
               .match_all_line("gi", "PlayerGameInfo")
-              .custom_line("WHERE gi.name STARTS WITH \"" + login + "\"")
-              .custom_line("AND NOT (gi)-[:GAME]->(g)")
+              .custom_line("WHERE NOT (gi)-[:PLAYER]->(gi)")
               .return_line().text(),
             lname=login
         )
         for record in response:
-            returnThis.append(record.data().get("g").get("name"))
-            returnThis.sort()
+            rname = record.data().get("g").get("name")
+            if rname not in returnThis:
+                returnThis.append(rname)
+                returnThis.sort()
 
         return returnThis
 
