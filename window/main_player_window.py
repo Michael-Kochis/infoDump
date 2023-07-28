@@ -75,19 +75,35 @@ class MainPlayerWindow:
 
     def getPotentialGames(self, login):
         returnThis = []
+        agames = self.filterActiveGames()
+
         response, summary, keys = self.db.driver.execute_query(
-            CypherBuilder().match_all_line("g", "GameInstance")
+            CypherBuilder()
               .match_line("l", "Login", "lname")
               .match_all_line("gi", "PlayerGameInfo")
-              .custom_line("WHERE NOT (gi)-[:PLAYER]->(gi)")
+              #.custom_line("WHERE NOT (l)<-[:PLAYER]-(gi)")
+              .match_all_line("g", "GameInstance")
+              .custom_line("WHERE NOT (l)<-[:PLAYER]-(gi)-[:GAME]->(g)")
               .return_line().text(),
             lname=login
         )
         for record in response:
             rname = record.data().get("g").get("name")
-            if rname not in returnThis:
+            if rname in agames:
+                print("Discard " + rname)
+            elif rname not in returnThis:
                 returnThis.append(rname)
                 returnThis.sort()
+
+        returnThis = [i for i in returnThis if i not in agames]
+        return returnThis
+
+    def filterActiveGames(self):
+        returnThis = []
+        temp_games = self.getActiveGames(self.login)
+        for record in temp_games:
+            string = record.split(": ")[1]
+            returnThis.append(string)
 
         return returnThis
 
@@ -104,6 +120,7 @@ class MainPlayerWindow:
                 self.refresh()
             elif event == "Create":
                 self.create_record(values)
+                self.refresh()
             else:
                 print(event)
         self.close()
