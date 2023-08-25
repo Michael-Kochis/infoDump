@@ -199,6 +199,15 @@ class RelationWindow:
 
         self.window["section_name" + section].Update(neo_list)
         self.window["relation_selected"].Update(self.getAllRelations())
+        self.refresh_relationship_values()
+
+    def refresh_relationship_values(self):
+        for i in range(1, 4):
+            precursor = "var" + str(i)
+            vname = precursor + "_name"
+            vvalue = precursor + "_value"
+            self.window[vname].Update("")
+            self.window[vvalue].Update("")
 
     def rename_node(self, values):
         atype, aname = self.get_atype_aname(values)
