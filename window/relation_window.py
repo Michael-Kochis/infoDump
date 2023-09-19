@@ -202,7 +202,7 @@ class RelationWindow:
         self.refresh_relationship_values()
         self.refresh_new_node_name()
 
-    def refresh_new_node_name:
+    def refresh_new_node_name(self):
         self.window["new_node_name"].Update("")
 
     def refresh_relationship_values(self):
