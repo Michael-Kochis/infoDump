@@ -62,8 +62,12 @@ class RelationWindow:
             print("Missing critical values")
 
     def create_relationship(self, values, aname=""):
-        atype = values["node_label"][0]
-        btype = values["node_label2"][0]
+        atype = ""
+        btype = ""
+        if len(values["node_label"]) > 0:
+            atype = values["node_label"][0]
+        if len(values["node_label2"]) > 0:
+            btype = values["node_label2"][0]
         bname = ""
         rtype = ""
         if len(values["section_name"]) > 0:
