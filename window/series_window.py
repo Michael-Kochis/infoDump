@@ -19,6 +19,7 @@ class SeriesWindow:
              front.Radio("Comic", "Series", enable_events=True, key="Comic"),
              front.Radio("Book", "Series", enable_events=True, key="Book")],
             [front.Radio("Universe", "Series", enable_events=True, key="Universe"),
+             front.Radio("GameVerse", "Series", enable_events=True, key="GameVerse"),
              front.Radio("Game", "Series", enable_events=True, key="Game")],
             [front.Listbox(values=series_list, select_mode="single",
                            key="series_name", size=(40, 5))],
@@ -56,10 +57,15 @@ class SeriesWindow:
             self.db.common.within(minor_type, name, "Series_Book", series)
         elif values["Universe"]:
             self.db.common.within(minor_type, name, "Universe", series)
-        elif values["Game"]:
+        elif values["GameVerse"]:
             self.db.common.within(minor_type, name, "Series_Game", series)
+        elif values["Game"]:
+            self.db.common.within(minor_type, name, "Game", series)
         else:
             print("Something went wrong.")
+
+    def getGames(self):
+        return self.getSeries("Game");
 
     def getSeries(self, type):
         returnThis =[]
@@ -96,7 +102,7 @@ class SeriesWindow:
             elif event in ("node_label"):
                 pass
             elif event in ("Book", "Comic", "Movie",
-                "Refresh", "TV", "Universe", "Game"):
+                "Refresh", "TV", "Universe", "GameVerse", "Game"):
                 self.refresh(values)
             elif event == "Create":
                 self.create_record(values)
@@ -116,8 +122,10 @@ class SeriesWindow:
             neo_list = self.getSeriesBook()
         elif values["Universe"]:
             neo_list = self.getSeries("Universe")
-        elif values["Game"]:
+        elif values["GameVerse"]:
             neo_list = self.getSeriesGame()
+        elif values["Game"]:
+            neo_list = self.getGames()
 
         self.window["series_name"].Update(neo_list)
 
