@@ -21,7 +21,7 @@ class SeriesWindow:
             [front.Radio("Universe", "Series", enable_events=True, key="Universe"),
              front.Radio("GameVerse", "Series", enable_events=True, key="GameVerse"),
              front.Radio("Game", "Series", enable_events=True, key="Game")],
-            [front.Text("Single:")]
+            [front.Text("Single:")],
             [front.Radio("Book", "Series", enable_events=True, key="LoneBook")],
             [front.Listbox(values=series_list, select_mode="single",
                            key="series_name", size=(40, 5))],
