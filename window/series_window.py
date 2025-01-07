@@ -21,7 +21,6 @@ class SeriesWindow:
             [front.Radio("Universe", "Series", enable_events=True, key="Universe"),
              front.Radio("GameVerse", "Series", enable_events=True, key="GameVerse"),
              front.Radio("Game", "Series", enable_events=True, key="Game")],
-            [front.Text("Single:")],
             [front.Radio("Book", "Series", enable_events=True, key="LoneBook")],
             [front.Listbox(values=series_list, select_mode="single",
                            key="series_name", size=(40, 5))],
@@ -107,7 +106,8 @@ class SeriesWindow:
             elif event in ("node_label"):
                 pass
             elif event in ("Book", "Comic", "Movie",
-                "Refresh", "TV", "Universe", "Game"):
+                "Refresh", "TV", "Universe", "Game",
+                "GameVerse", "LoneBook"):
                 self.refresh(values)
             elif event == "Create":
                 self.create_record(values)
