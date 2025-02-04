@@ -20,6 +20,10 @@ class CypherBuilder:
         self.letters.sort()
         return self.letters
 
+    def limit(self, limit):
+        self.string += "LIMIT " + str(limit) +"\n"
+        return self
+
     def match_line(self, letter, type, xname):
         self.letters.append(letter)
         self.string += "MATCH (" + letter + " :" \
@@ -58,6 +62,10 @@ class CypherBuilder:
             self.string += "} "
 
         self.string += "]->(" + end + ")\n"
+        return self
+
+    def where(self, text):
+        self.string += "WHERE " + text + "\n"
         return self
 
     def return_line(self):
