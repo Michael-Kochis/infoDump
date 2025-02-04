@@ -12,10 +12,14 @@ class GenderWindow:
         ns_layout = ns.NodeSelectWindow.node_select_layout()
         gender_list = self.getGenderList()
         layout = (
+            [front.Text("Missing Gender")],
             [front.Listbox(values=gender_list, select_mode="single",
                            key="gender_list", size=(40, 10))],
+            [front.Button("Done", disabled=False),
+                front.Button("Male"), front.Button("Female"),
+                front.Button("Variable"), front.Button("Neuter")]
         )
-        self.window = front.Window("Infodump Main", layout, modal=True)
+        self.window = front.Window("Gender Finder", layout, modal=True)
 
     def getGenderList(self):
         returnThis = []
