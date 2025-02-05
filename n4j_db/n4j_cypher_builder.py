@@ -42,6 +42,10 @@ class CypherBuilder:
             + type + " {name: $" + xname + "})\n"
         return self
 
+    def node_property(self, letter, property, value):
+        self.string += "SET " + letter + "." + property + " = \"" + value + "\"\n"
+        return self
+
     def relation_basic(self, start, end, rel_name):
         self.string += "MERGE (" + start + ")-[:" \
             + rel_name + "]->(" + end + ")\n"
