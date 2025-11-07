@@ -62,8 +62,11 @@ class SeriesWindow:
         else:
             print("Something went wrong.")
 
+    def getBook(self):
+        return self.getSeries("Book")
+
     def getGames(self):
-        return self.getSeries("Game");
+        return self.getSeries("Game")
 
     def getSeries(self, type):
         returnThis =[]
@@ -89,6 +92,9 @@ class SeriesWindow:
     def getGameVerse(self):
         return self.getSeries("GameVerse")
 
+    def getMovie(self):
+        return self.getSeries("Movie")
+
     def getSeriesMovie(self):
         return self.getSeries("Series_Movie")
 
@@ -104,7 +110,7 @@ class SeriesWindow:
                 pass
             elif event in ("Book", "Comic", "Movie",
                 "Refresh", "TV", "Universe", "Game",
-                "GameVerse", "LoneBook"):
+                "GameVerse"):
                 self.refresh(values)
             elif event == "Create":
                 self.create_record(values)
@@ -117,11 +123,11 @@ class SeriesWindow:
         if values["TV"]:
             neo_list = self.getSeriesTV()
         elif values["Movie"]:
-            neo_list = self.getSeriesMovie()
+            neo_list = self.getMovie()
         elif values["Comic"]:
             neo_list = self.getSeriesComic()
         elif values["Book"]:
-            neo_list = self.getSeriesBook()
+            neo_list = self.getBook()
         elif values["Universe"]:
             neo_list = self.getSeries("Universe")
         elif values["GameVerse"]:
