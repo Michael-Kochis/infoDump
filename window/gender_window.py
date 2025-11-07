@@ -24,7 +24,7 @@ class GenderWindow:
     def getGenderList(self):
         returnThis = []
         response, summary, keys = self.db.driver.execute_query(
-            CypherBuilder().match_all_line("p", "Person")
+            CypherBuilder().match_all_line("p", "Persona")
             .where("p.gender IS NULL").limit(60)
             .return_line().text()
         )
@@ -64,12 +64,12 @@ class GenderWindow:
             for val in range(1, n):
                 new_name += ' ' + val;
             response, summary, keys = self.db.driver.execute_query(
-                CypherBuilder().match_all_line("m", "Person")
+                CypherBuilder().match_all_line("m", "Persona")
                 .where("m.name = \"" + new_name + "\"")
                 .node_property("m", "gender", neoGender)
                 .return_line().text()
             )
-            print("Person " + new_name + " is now gender: " + neoGender)
+            print("Persona " + new_name + " is now gender: " + neoGender)
             neolist = self.getGenderList()
             self.window["gender_list"].Update(neolist)
         else:
