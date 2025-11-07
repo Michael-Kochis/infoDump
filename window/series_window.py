@@ -50,7 +50,7 @@ class SeriesWindow:
         elif values["TV"]:
             self.db.common.within(minor_type, name, "Series_TV", series)
         elif values["Movie"]:
-            self.db.common.within(minor_type, name, "Series_TMovie", series)
+            self.db.common.within(minor_type, name, "Series_Movie", series)
         elif values["Comic"]:
             self.db.common.within(minor_type, name, "Series_Comic", series)
         elif values["Book"]:
@@ -58,9 +58,7 @@ class SeriesWindow:
         elif values["Universe"]:
             self.db.common.within(minor_type, name, "Universe", series)
         elif values["GameVerse"]:
-            self.db.common.within(minor_type, name, "Series_Game", series)
-        elif values["LoneBook"]:
-            self.db.common.within(minor_type, name, "Book", series)
+            self.db.common.within(minor_type, name, "Game", series)
         else:
             print("Something went wrong.")
 
@@ -88,8 +86,8 @@ class SeriesWindow:
     def getSeriesComic(self):
         return self.getSeries("Series_Comic")
 
-    def getSeriesGame(self):
-        return self.getSeries("Series_Game")
+    def getGameVerse(self):
+        return self.getSeries("GameVerse")
 
     def getSeriesMovie(self):
         return self.getSeries("Series_Movie")
@@ -127,9 +125,7 @@ class SeriesWindow:
         elif values["Universe"]:
             neo_list = self.getSeries("Universe")
         elif values["GameVerse"]:
-            neo_list = self.getSeriesGame()
-        elif values["LoneBook"]:
-            neo_list = self.getLoneBook()
+            neo_list = self.getGameVerse()
         elif values["Game"]:
             neo_list = self.getGames()
 
