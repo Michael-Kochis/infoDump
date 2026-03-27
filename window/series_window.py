@@ -10,7 +10,7 @@ class SeriesWindow:
         self.db = N4J_DB()
 
         self.root = tk.Tk()
-        self.root.title("Infodump Main")
+        self.root.title("Within Series")
         self.root.protocol("WM_DELETE_WINDOW", self.close)
 
         self.series_type = tk.StringVar(value="TV")
